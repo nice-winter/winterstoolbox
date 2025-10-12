@@ -1,5 +1,5 @@
 import { wmi } from './wmi'
-import { Win32CacheMemory } from './win32CacheMemory'
+import { Win32CacheMemory } from './Win32_CacheMemory'
 
 interface IWin32Processor {
   AddressWidth: number
@@ -21,7 +21,7 @@ interface IWin32Processor {
   ErrorDescription: string
   ExtClock: number
   Family: number
-  InstallDate: number | null
+  InstallDate: Date | null
   L1CacheSize: number
   L2CacheSize: number
   L2CacheSpeed: number | null
@@ -91,7 +91,7 @@ class Win32Processor implements IWin32Processor {
   ErrorDescription!: string
   ExtClock!: number
   Family!: number
-  InstallDate!: number | null
+  InstallDate!: Date | null
   L1CacheSize!: number
   L2CacheSize!: number
   L2CacheSpeed!: number | null

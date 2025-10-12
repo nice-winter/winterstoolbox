@@ -9,7 +9,7 @@ interface IWin32BaseBoard {
   Height: number
   HostingBoard: boolean
   HotSwappable: boolean
-  InstallDate: number
+  InstallDate: Date
   Manufacturer: string
   Model: string
   Name: string
@@ -30,6 +30,7 @@ interface IWin32BaseBoard {
   Version: string
   Weight: number
   Width: number
+  Chipset: string
 }
 
 /**
@@ -48,7 +49,7 @@ class Win32BaseBoard implements IWin32BaseBoard {
   Height!: number
   HostingBoard!: boolean
   HotSwappable!: boolean
-  InstallDate!: number
+  InstallDate!: Date
   Manufacturer!: string
   Model!: string
   Name!: string
@@ -69,6 +70,7 @@ class Win32BaseBoard implements IWin32BaseBoard {
   Version!: string
   Weight!: number
   Width!: number
+  Chipset!: string
 
   constructor(...keys: string[]) {
     const raw = wmi.query(`SELECT ${keys.length > 0 ? keys.join(', ') : '*'} FROM Win32_BaseBoard`)

@@ -27,10 +27,10 @@ interface IWin32CacheMemory {
   ErrorInfo: number
   ErrorMethodology: string
   ErrorResolution: number
-  ErrorTime: number
+  ErrorTime: Date
   ErrorTransferSize: number
   FlushTimer: number
-  InstallDate: number
+  InstallDate: Date
   InstalledSize: number
   LastErrorCode: number
   Level: number
