@@ -2,7 +2,8 @@ import { app, BrowserWindow } from 'electron'
 import { electronApp, optimizer } from '@electron-toolkit/utils'
 import { initIpcMain } from './ipc'
 import { createMainWindow } from './mainWindow'
-import { getCpuId } from './helper/cpuid'
+import { getCpuId, getCpuInfo } from './helper/hwinfo'
+import { Win32CacheMemory } from './helper/wmi/win32CacheMemory'
 
 /**
  * This method will be called when Electron has finished
@@ -42,6 +43,6 @@ app.on('window-all-closed', () => {
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
 
-const cpuid = getCpuId()
+const cpuid = getCpuInfo()
 
 console.log(cpuid)
