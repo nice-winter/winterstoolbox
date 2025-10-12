@@ -1,6 +1,6 @@
-import { exec } from 'node:child_process'
+import { execSync } from 'node:child_process'
 import { exec as sudoexec } from '@vscode/sudo-prompt'
-import { Win32Process } from './win32Process'
+import { Win32Processor } from './win32Process'
 
 type ExecCallbackFnParams<T> = T extends (
   cmd: string,
@@ -10,35 +10,37 @@ type ExecCallbackFnParams<T> = T extends (
   : never
 
 export class Wmi {
-  win32Process: Win32Process
+  win32Process: Win32Processor
 
   constructor() {
-    this.win32Process = new Win32Process(this)
+    this.win32Process = new Win32Processor(this)
   }
 
   query(str: string, sudo?: boolean) {
-    const cmd = `Get-CimInstance -Query "${str}"`
+    const cmd = `powershell.exe -Command "Get-CimInstance -Query '${str}' | Format-List *"`
 
-    return new Promise<ExecCallbackFnParams<typeof sudoexec>>((res, reject) => {
-      if (sudo) {
-        sudoexec(cmd, { name: `Winter's Toolbox Helper` }, (err, stdout, stderr) => {
-          if (err) {
-            reject(err)
-          }
+    return execSync(cmd).toString()
 
-          stdout = stdout?.toString()
+    // return new Promise<ExecCallbackFnParams<typeof sudoexec>>((res, reject) => {
+    //   if (sudo) {
+    //     sudoexec(cmd, { name: `Winters Toolbox Helper` }, (err, stdout, stderr) => {
+    //       if (err) {
+    //         reject(err)
+    //       }
 
-          res({ stdout, stderr })
-        })
-      } else {
-        exec(cmd, (err, stdout, stderr) => {
-          if (err) {
-            reject(err)
-          }
+    //       stdout = stdout?.toString()
 
-          res({ stdout, stderr })
-        })
-      }
-    })
+    //       res({ stdout, stderr })
+    //     })
+    //   } else {
+    //     exec(cmd, (err, stdout, stderr) => {
+    //       if (err) {
+    //         reject(err)
+    //       }
+
+    //       res({ stdout, stderr })
+    //     })
+    //   }
+    // })
   }
 }
