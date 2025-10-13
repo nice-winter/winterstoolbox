@@ -7,6 +7,7 @@ import Components from 'unplugin-vue-components/vite'
 import vueRouter from 'unplugin-vue-router/vite'
 import { VueRouterAutoImports } from 'unplugin-vue-router'
 import vueDevTools from 'vite-plugin-vue-devtools'
+import { AntDesignVueResolver } from 'unplugin-vue-components/resolvers'
 
 export const processPath = {
   main: resolve('src/main'),
@@ -44,7 +45,12 @@ export default defineConfig({
       }),
       Components({
         dts: 'src/types/components.d.ts',
-        resolvers: []
+        resolvers: [
+          AntDesignVueResolver({
+            importStyle: 'less',
+            resolveIcons: true
+          })
+        ]
       })
     ]
   }
