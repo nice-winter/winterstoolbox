@@ -4,6 +4,11 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+patchedDependencies:
+  systeminformation:
+    hash: f001ad02621b36170bb2baeb02641f98b0c1e9807a6ade901192b1c6ad542b01
+    path: patches/systeminformation.patch
+
 importers:
 
   .:
@@ -31,7 +36,7 @@ importers:
         version: 3.0.3(typescript@5.9.3)(vue@3.5.22(typescript@5.9.3))
       systeminformation:
         specifier: ^5.27.11
-        version: 5.27.11
+        version: 5.27.11(patch_hash=f001ad02621b36170bb2baeb02641f98b0c1e9807a6ade901192b1c6ad542b01)
       vue:
         specifier: ^3.5.22
         version: 3.5.22(typescript@5.9.3)
@@ -49,7 +54,7 @@ importers:
         specifier: ^2.0.0
         version: 2.0.0(@types/node@24.7.2)
       '@types/node':
-        specifier: ^24.7.1
+        specifier: ^24.7.2
         version: 24.7.2
       '@vitejs/plugin-vue':
         specifier: ^6.0.1
@@ -6049,7 +6054,7 @@ snapshots:
     dependencies:
       '@pkgr/core': 0.2.9
 
-  systeminformation@5.27.11: {}
+  systeminformation@5.27.11(patch_hash=f001ad02621b36170bb2baeb02641f98b0c1e9807a6ade901192b1c6ad542b01): {}
 
   tar@6.2.1:
     dependencies:

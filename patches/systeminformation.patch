@@ -1,0 +1,21 @@
+diff --git a/lib/util.js b/lib/util.js
+index f3b5dd7e40e811ce848abcc0181446ad82fb10f9..e182b78b0ae45507c1316236051f35a81fae364d 100644
+--- a/lib/util.js
++++ b/lib/util.js
+@@ -20,6 +20,7 @@ const spawn = require('child_process').spawn;
+ const exec = require('child_process').exec;
+ const execSync = require('child_process').execSync;
+ const util = require('util');
++const iconv = require('iconv-lite')
+ 
+ let _platform = process.platform;
+ const _linux = (_platform === 'linux' || _platform === 'android');
+@@ -505,7 +506,7 @@ function powerShell(cmd) {
+           }
+           if (child && child.pid) {
+             child.stdout.on('data', function (data) {
+-              result = result + data.toString('utf8');
++              result = result + iconv.decode(data, 'GBK');
+             });
+             child.stderr.on('data', function () {
+               child.kill();
