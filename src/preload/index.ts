@@ -4,9 +4,14 @@ import { electronAPI } from '@electron-toolkit/preload'
 // Custom APIs for renderer
 const api = {
   ping: () => {
-    return electronAPI.ipcRenderer.invoke('ping') as Promise<string>
+    return electronAPI.ipcRenderer.invoke('ping')
   },
-  getElectronProcessVersions: () => electronAPI.process.versions
+
+  getElectronProcessVersions: () => electronAPI.process.versions,
+
+  hwinfo: () => {
+    return electronAPI.ipcRenderer.invoke('hwinfo')
+  }
 }
 
 /**
