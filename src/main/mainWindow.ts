@@ -4,13 +4,17 @@ import { is } from '@electron-toolkit/utils'
 
 import icon from '../../resources/icon.png?asset'
 
+let mainWindow: BrowserWindow
+
 /**
  * Create the main browser window.
  */
 function createMainWindow() {
-  const mainWindow = new BrowserWindow({
+  mainWindow = new BrowserWindow({
     width: 1000,
     height: 600,
+    minWidth: 900,
+    minHeight: 500,
     frame: false,
     show: false,
     autoHideMenuBar: true,
@@ -18,11 +22,11 @@ function createMainWindow() {
     webPreferences: {
       preload: join(__dirname, '../preload/index.mjs'),
       sandbox: false
-      // experimentalFeatures: true
     },
 
     hasShadow: true,
     titleBarStyle: 'hidden'
+    // ...(process.platform !== 'darwin' ? { titleBarOverlay: true } : {})
   })
 
   mainWindow.setBackgroundMaterial('acrylic')
@@ -47,4 +51,4 @@ function createMainWindow() {
   return mainWindow
 }
 
-export { createMainWindow }
+export { createMainWindow, mainWindow }

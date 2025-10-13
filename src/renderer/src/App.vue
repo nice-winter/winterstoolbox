@@ -7,17 +7,7 @@ onBeforeMount(async () => {
 
 <template>
   <a-app>
-    <a-flex class="window-control-area only-top" justify="flex-end" align="flex-start">
-      <div class="window-control-area__btn">
-        <i class="iconfont quanping"></i>
-      </div>
-      <div class="window-control-area__btn">
-        <i class="iconfont suoxiao"></i>
-      </div>
-      <div class="window-control-area__btn">
-        <i class="iconfont tuichu"></i>
-      </div>
-    </a-flex>
+    <WindowControlMenu />
 
     <a-layout class="app-container">
       <a-layout-sider class="left-sider">Sider</a-layout-sider>
@@ -53,35 +43,6 @@ onBeforeMount(async () => {
 <style lang="less" scoped>
 .ant-layout {
   background-color: transparent;
-}
-
-.window-control-area {
-  -webkit-app-region: no-drag;
-  position: fixed;
-  top: 0;
-  right: 0;
-
-  .window-control-area__btn {
-    -webkit-app-region: no-drag;
-    width: 32px;
-    height: 28px;
-    padding: 8px 8px;
-    text-align: center;
-    line-height: 12px;
-
-    i {
-      font-size: 14px;
-    }
-
-    &:hover {
-      background-color: #ccc;
-    }
-
-    &:hover:last-child {
-      color: #fff;
-      background-color: #c42b1c;
-    }
-  }
 }
 
 .app-container {

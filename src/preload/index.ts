@@ -1,4 +1,4 @@
-import { contextBridge } from 'electron'
+import { contextBridge, app } from 'electron'
 import { electronAPI } from '@electron-toolkit/preload'
 
 // Custom APIs for renderer
@@ -11,6 +11,24 @@ const api = {
 
   hwinfo: () => {
     return electronAPI.ipcRenderer.invoke('hwinfo')
+  },
+
+  windowControl: {
+    isMaximized: () => {
+      return electronAPI.ipcRenderer.invoke('isMaximized')
+    },
+    minimize: () => {
+      return electronAPI.ipcRenderer.send('minimize')
+    },
+    maximize: () => {
+      return electronAPI.ipcRenderer.send('maximize')
+    },
+    unmaximize: () => {
+      return electronAPI.ipcRenderer.send('unmaximize')
+    },
+    close: () => {
+      return electronAPI.ipcRenderer.send('close')
+    }
   }
 }
 

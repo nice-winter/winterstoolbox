@@ -1,6 +1,6 @@
 import { app, BrowserWindow } from 'electron'
 import { electronApp, optimizer } from '@electron-toolkit/utils'
-import { initIpcMain } from './ipc'
+import { initIpcMain } from './ipcMain'
 import { createMainWindow } from './mainWindow'
 
 /**
