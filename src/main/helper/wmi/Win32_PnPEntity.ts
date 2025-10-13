@@ -1,4 +1,5 @@
 import { wmi } from './wmi'
+import { search } from '../../common/searchFunction'
 
 interface IWin32_PnPEntity {
   Availability: number
@@ -37,6 +38,14 @@ type SearchCondition<T> = {
   }
 }[keyof T]
 
+/**
+ * Win32_PnPEntity class
+ *
+ * The Win32_PnPEntity WMI class represents the properties of a Plug and Play device.
+ * Plug and Play entities are shown as entries in the Device Manager located in Control Panel.
+ *
+ * @url https://learn.microsoft.com/en-us/windows/win32/cimwin32prov/win32-pnpentity
+ */
 class Win32_PnPEntity extends Array<IWin32_PnPEntity> {
   private _drivers: Array<IWin32_PnPEntity>
 
@@ -50,23 +59,7 @@ class Win32_PnPEntity extends Array<IWin32_PnPEntity> {
   }
 
   findDriver(...conditions: SearchCondition<IWin32_PnPEntity>[]) {
-    return this._drivers.filter((item) =>
-      conditions.every((cond) => {
-        const { key, keyword, matchWholeWord = true } = cond
-        const value = item[key]
-
-        if (value == null) return false
-
-        if (matchWholeWord) {
-          return value === keyword
-        }
-
-        // 模糊匹配
-        const valStr = String(value).toLowerCase()
-        const keyStr = String(keyword).toLowerCase()
-        return valStr.includes(keyStr)
-      })
-    )
+    return search(this._drivers, ...conditions)
   }
 }
 
