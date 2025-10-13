@@ -30,4 +30,6 @@ function getAll() {
   })
 }
 
-export { getCpuInfo, getCpuInfo as getCpuId, getAll }
+function hwinfo() {}
+
+export { getCpuInfo, getCpuInfo as getCpuId, getAll, hwinfo }
