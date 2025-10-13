@@ -1,1 +1,42 @@
 //
+
+html,
+body {
+  background: transparent;
+}
+
+html {
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+body {
+  user-select: none;
+}
+
+ul {
+  list-style: none;
+}
+
+.only-top {
+  z-index: 99999;
+}
+
+.only-behind {
+  z-index: -99999;
+}
+
+.draggable-view {
+  position: fixed;
+  z-index: var(-999);
+  -webkit-app-region: drag;
+}
+
+.draggable-view {
+  &.header__title {
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 64px;
+  }
+}

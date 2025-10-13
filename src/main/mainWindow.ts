@@ -9,17 +9,23 @@ import icon from '../../resources/icon.png?asset'
  */
 function createMainWindow() {
   const mainWindow = new BrowserWindow({
-    width: 900,
-    height: 670,
-    // frame: false,
+    width: 1000,
+    height: 600,
+    frame: false,
     show: false,
     autoHideMenuBar: true,
     ...(process.platform === 'linux' ? { icon } : {}),
     webPreferences: {
       preload: join(__dirname, '../preload/index.mjs'),
       sandbox: false
-    }
+      // experimentalFeatures: true
+    },
+
+    hasShadow: true,
+    titleBarStyle: 'hidden'
   })
+
+  mainWindow.setBackgroundMaterial('acrylic')
 
   mainWindow.on('ready-to-show', () => {
     mainWindow.show()
