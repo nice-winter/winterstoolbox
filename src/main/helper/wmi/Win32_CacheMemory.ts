@@ -1,6 +1,6 @@
 import { wmi } from './wmi'
 
-interface IWin32CacheMemory {
+interface IWin32_CacheMemory {
   Access: number
   AdditionalErrorData: number[]
   Associativity: number
@@ -65,14 +65,14 @@ interface IWin32CacheMemory {
  * @url https://learn.microsoft.com/en-us/windows/win32/cimwin32prov/win32-cachememory
  * @todo extends cim-cachememory https://learn.microsoft.com/en-us/windows/win32/cimwin32prov/cim-cachememory
  */
-class Win32CacheMemory extends Array<IWin32CacheMemory> {
-  private _caches: Array<IWin32CacheMemory>
+class Win32_CacheMemory extends Array<IWin32_CacheMemory> {
+  private _caches: Array<IWin32_CacheMemory>
   constructor(...keys: string[]) {
     const raw = wmi.query(
       `SELECT ${keys.length > 0 ? keys.join(', ') : '*'} FROM Win32_CacheMemory`
     )
 
-    const caches = JSON.parse(raw) as IWin32CacheMemory[]
+    const caches = JSON.parse(raw) as IWin32_CacheMemory[]
 
     super(...caches)
 
@@ -92,4 +92,4 @@ class Win32CacheMemory extends Array<IWin32CacheMemory> {
   }
 }
 
-export { Win32CacheMemory, type IWin32CacheMemory }
+export { Win32_CacheMemory, type IWin32_CacheMemory }

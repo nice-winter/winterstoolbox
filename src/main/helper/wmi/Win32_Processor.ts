@@ -1,7 +1,7 @@
 import { wmi } from './wmi'
-import { Win32CacheMemory } from './Win32_CacheMemory'
+import { Win32_CacheMemory } from './Win32_CacheMemory'
 
-interface IWin32Processor {
+interface IWin32_Processor {
   AddressWidth: number
   Architecture: number
   AssetTag: string
@@ -71,7 +71,7 @@ interface IWin32Processor {
  *
  * @url https://learn.microsoft.com/en-us/windows/win32/cimwin32prov/win32-processor
  */
-class Win32Processor implements IWin32Processor {
+class Win32_Processor implements IWin32_Processor {
   AddressWidth!: number
   Architecture!: number
   AssetTag!: string
@@ -134,9 +134,9 @@ class Win32Processor implements IWin32Processor {
 
   constructor(...keys: string[]) {
     const raw = wmi.query(`SELECT ${keys.length > 0 ? keys.join(', ') : '*'} FROM Win32_Processor`)
-    Object.assign(this, JSON.parse(raw) as IWin32Processor)
+    Object.assign(this, JSON.parse(raw) as IWin32_Processor)
 
-    const LevelCacheMemory = new Win32CacheMemory().getLevelCache()
+    const LevelCacheMemory = new Win32_CacheMemory().getLevelCache()
 
     this.L1CacheSize = LevelCacheMemory[0]
     this.L2CacheSize = LevelCacheMemory[1]
@@ -148,4 +148,4 @@ class Win32Processor implements IWin32Processor {
   setPowerState() {}
 }
 
-export { Win32Processor, type IWin32Processor }
+export { Win32_Processor, type IWin32_Processor }

@@ -1,6 +1,6 @@
 import { wmi } from './wmi'
 
-interface IWin32BaseBoard {
+interface IWin32_BaseBoard {
   Caption: string
   ConfigOptions: string[]
   CreationClassName: string
@@ -40,7 +40,7 @@ interface IWin32BaseBoard {
  *
  * @url https://learn.microsoft.com/en-us/windows/win32/cimwin32prov/win32-baseboard
  */
-class Win32BaseBoard implements IWin32BaseBoard {
+class Win32_BaseBoard implements IWin32_BaseBoard {
   Caption!: string
   ConfigOptions!: string[]
   CreationClassName!: string
@@ -74,8 +74,8 @@ class Win32BaseBoard implements IWin32BaseBoard {
 
   constructor(...keys: string[]) {
     const raw = wmi.query(`SELECT ${keys.length > 0 ? keys.join(', ') : '*'} FROM Win32_BaseBoard`)
-    Object.assign(this, JSON.parse(raw) as IWin32BaseBoard)
+    Object.assign(this, JSON.parse(raw) as IWin32_BaseBoard)
   }
 }
 
-export { Win32BaseBoard, type IWin32BaseBoard }
+export { Win32_BaseBoard, type IWin32_BaseBoard }

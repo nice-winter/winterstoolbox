@@ -1,14 +1,12 @@
-import { wmi } from './wmi/wmi'
-import { Win32CacheMemory } from './wmi/Win32_CacheMemory'
-import { Win32Processor } from './wmi/Win32_Processor'
-import { writeFileSync } from 'node:fs'
+import { Win32_CacheMemory } from './wmi/Win32_CacheMemory'
+import { Win32_Processor } from './wmi/Win32_Processor'
 import { Win32_PnPEntity } from './wmi/Win32_PnPEntity'
 
 function getCpuInfo() {
-  const cpuInfo = new Win32Processor()
-  const cacheMemory = new Win32CacheMemory()
+  const cpuInfo = new Win32_Processor()
+  const cacheMemory = new Win32_CacheMemory()
 
-  return new Win32Processor()
+  return new Win32_Processor()
 }
 
 function getAll() {
