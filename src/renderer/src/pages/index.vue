@@ -7,6 +7,32 @@ definePage({
   }
 })
 
+import { useProgress } from '@/common/useProgress'
+
+const route = useRoute()
+const routePath = unref(route.path)
+
+const progress = useProgress()
+const value = ref(0)
+
+let t: NodeJS.Timeout | 0 = 0
+
+const clrT = () => {
+  clearInterval(t)
+  t = 0
+  value.value = 0
+}
+
+const setT = () => {
+  if (t || value.value >= 1) {
+    clrT()
+  }
+  t = setInterval(() => {
+    progress.set((value.value = value.value + 0.05), routePath)
+    if (value.value >= 1) clrT()
+  }, 1000)
+}
+
 const ping = async () => {
   const res = await window.api.ping()
   console.log('From ipcMain:', res)
@@ -14,6 +40,7 @@ const ping = async () => {
 </script>
 
 <template>
+  <AButton @click="setT()">SET</AButton>
   <div v-for="i in 30" :key="i" class="text">
     Build an Electron app with
     <span class="vue">Vue</span>

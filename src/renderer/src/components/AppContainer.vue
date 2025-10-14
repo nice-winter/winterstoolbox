@@ -1,4 +1,9 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { useProgress } from '@/common/useProgress'
+import { LoadingOutlined } from '@ant-design/icons-vue'
+
+const progress = useProgress()
+</script>
 
 <template>
   <a-layout class="app-container">
@@ -10,6 +15,11 @@
       <a-layout-header class="header">
         <div class="header__title">
           <slot name="headerTitle"></slot>
+          <a-spin v-show="progress.hasProgress.value" style="margin-left: 10px">
+            <template #indicator>
+              <LoadingOutlined style="font-size: 16px" />
+            </template>
+          </a-spin>
         </div>
 
         <div class="header__actions">
@@ -19,7 +29,7 @@
         <div class="header__bgmask"></div>
       </a-layout-header>
 
-      <a-layout-content class="content">
+      <a-layout-content id="app-container__content" class="content">
         <Scrollbar class="content__with-scrollbar" :auto-hide="false" :delay="100">
           <slot name="content"></slot>
         </Scrollbar>
@@ -88,9 +98,12 @@
       min-height: 120px;
 
       .content__with-scrollbar {
-        padding: 0 20px;
+        // padding: 0 20px;
         max-height: 100%;
 
+        :deep(.scrollbar-content) {
+          padding: 0 20px;
+        }
         :deep(.scrollbar-content::after),
         :deep(.scrollbar-content::before) {
           padding-top: 20px;
