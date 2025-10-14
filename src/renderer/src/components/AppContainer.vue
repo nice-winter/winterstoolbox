@@ -20,7 +20,7 @@
       </a-layout-header>
 
       <a-layout-content class="content">
-        <Scrollbar class="content__with-scrollbar" style="" :auto-hide="false">
+        <Scrollbar class="content__with-scrollbar" :auto-hide="false" :delay="100">
           <slot name="content"></slot>
         </Scrollbar>
       </a-layout-content>
