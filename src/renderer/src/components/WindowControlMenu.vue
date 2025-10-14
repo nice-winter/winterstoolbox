@@ -1,4 +1,8 @@
 <script setup lang="ts">
+import { useWindowSize, watchDebounced } from '@vueuse/core'
+
+const wh = useWindowSize()
+
 const maximize = () => {
   window.api.windowControl.isMaximized().then((isMaximized) => {
     if (isMaximized) {
@@ -10,6 +14,16 @@ const maximize = () => {
 }
 
 const isMaximized = ref(false)
+
+watchDebounced(
+  () => wh.width.value + wh.height.value,
+  () => {
+    window.api.windowControl.isMaximized().then((flag) => {
+      isMaximized.value = flag
+    })
+  },
+  { debounce: 200, maxWait: 500 }
+)
 
 const minimize = window.api.windowControl.minimize
 const close = window.api.windowControl.close
