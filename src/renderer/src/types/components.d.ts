@@ -20,7 +20,7 @@ declare module 'vue' {
     RouteMenu: typeof import('./../components/RouteMenu.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
-    Scrollbar: typeof import('./../components/Scrollbar/Scrollbar.vue')['default']
+    Scrollbar: typeof import('./../components/Scrollbar.vue')['default']
     WindowControlMenu: typeof import('./../components/WindowControlMenu.vue')['default']
   }
 }
