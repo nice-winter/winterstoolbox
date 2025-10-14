@@ -6,23 +6,58 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "20530278",
+      "name": "我的",
+      "font_class": "wode",
+      "unicode": "e634",
+      "unicode_decimal": 58932
+    },
+    {
+      "icon_id": "20558590",
+      "name": "恢复最大化",
+      "font_class": "unmax",
+      "unicode": "e63f",
+      "unicode_decimal": 58943
+    },
+    {
+      "icon_id": "20558594",
+      "name": "垃圾清理",
+      "font_class": "cleaner",
+      "unicode": "e640",
+      "unicode_decimal": 58944
+    },
+    {
+      "icon_id": "20558608",
+      "name": "网站",
+      "font_class": "web",
+      "unicode": "e643",
+      "unicode_decimal": 58947
+    },
+    {
+      "icon_id": "20587660",
+      "name": "感叹号",
+      "font_class": "info",
+      "unicode": "e64b",
+      "unicode_decimal": 58955
+    },
+    {
       "icon_id": "45213302",
-      "name": "反选",
-      "font_class": "fanxuan",
+      "name": "刷新",
+      "font_class": "refresh",
       "unicode": "e609",
       "unicode_decimal": 58889
     },
     {
       "icon_id": "45213303",
-      "name": "缩小",
-      "font_class": "suoxiao",
+      "name": "最小化",
+      "font_class": "min",
       "unicode": "e60a",
       "unicode_decimal": 58890
     },
     {
       "icon_id": "45213304",
-      "name": "退出",
-      "font_class": "tuichu",
+      "name": "关闭",
+      "font_class": "close",
       "unicode": "e60b",
       "unicode_decimal": 58891
     },
@@ -57,14 +92,14 @@
     {
       "icon_id": "45213309",
       "name": "设置",
-      "font_class": "shezhi",
+      "font_class": "settings",
       "unicode": "e610",
       "unicode_decimal": 58896
     },
     {
       "icon_id": "45213310",
-      "name": "全屏",
-      "font_class": "quanping",
+      "name": "最大化",
+      "font_class": "max",
       "unicode": "e611",
       "unicode_decimal": 58897
     },
@@ -84,8 +119,8 @@
     },
     {
       "icon_id": "45213313",
-      "name": "屏幕同步",
-      "font_class": "pingmutongbu",
+      "name": "硬件信息",
+      "font_class": "hwinfo",
       "unicode": "e614",
       "unicode_decimal": 58900
     },
@@ -126,15 +161,15 @@
     },
     {
       "icon_id": "45213319",
-      "name": "文件",
-      "font_class": "wenjian",
+      "name": "文件夹",
+      "font_class": "folder",
       "unicode": "e61a",
       "unicode_decimal": 58906
     },
     {
       "icon_id": "45213320",
       "name": "删除",
-      "font_class": "shanchu",
+      "font_class": "delete",
       "unicode": "e61b",
       "unicode_decimal": 58907
     },
