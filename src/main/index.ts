@@ -1,7 +1,10 @@
+import { join } from 'node:path'
 import { app, BrowserWindow } from 'electron'
-import { electronApp, optimizer } from '@electron-toolkit/utils'
+import { electronApp, is, optimizer } from '@electron-toolkit/utils'
 import { initIpcMain } from './ipcMain'
-import { createMainWindow } from './mainWindow'
+import { createWindow } from './window/createWindow'
+
+export let mainWindow: BrowserWindow
 
 /**
  * This method will be called when Electron has finished
@@ -22,11 +25,20 @@ app.whenReady().then(() => {
   app.on('activate', function () {
     // On macOS it's common to re-create a window in the app when the
     // dock icon is clicked and there are no other windows open.
-    if (BrowserWindow.getAllWindows().length === 0) createMainWindow()
+    if (BrowserWindow.getAllWindows().length === 0) mainWindow = createWindow()
   })
 
   initIpcMain()
-  createMainWindow()
+
+  mainWindow = createWindow(1000, 600, 900, 500)
+
+  // HMR for renderer base on electron-vite cli.
+  // Load the remote URL for development or the local html file for production.
+  if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
+    mainWindow.loadURL(process.env['ELECTRON_RENDERER_URL'])
+  } else {
+    mainWindow.loadFile(join(__dirname, '../renderer/index.html'))
+  }
 })
 
 // Quit when all windows are closed, except on macOS. There, it's common

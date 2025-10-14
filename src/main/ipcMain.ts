@@ -1,6 +1,6 @@
 import { ipcMain } from 'electron'
 import { hwinfo } from './helper/hwinfo'
-import { mainWindow } from './mainWindow'
+import { mainWindow } from '.'
 
 function initIpcMain() {
   ipcMain.handle('ping', () => {
