@@ -1,4 +1,6 @@
 <script setup lang="ts">
+const route = useRoute()
+
 onBeforeMount(async () => {
   const hwinfo = await window.api.hwinfo()
   console.log(hwinfo)
@@ -16,7 +18,7 @@ onBeforeMount(async () => {
 
       <template #headerTitle>
         <a-typography-title :level="5" style="margin-bottom: 0" class="no-drag">
-          这是一个不得了的标题
+          {{ route.meta.name }}
         </a-typography-title>
       </template>
 

@@ -1,4 +1,12 @@
 <script setup lang="ts">
+definePage({
+  meta: {
+    name: '硬件信息',
+    icon: 'hwinfo',
+    weight: 0
+  }
+})
+
 const ping = async () => {
   const res = await window.api.ping()
   console.log('From ipcMain:', res)

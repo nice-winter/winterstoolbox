@@ -15,6 +15,7 @@ declare module 'vue' {
     ALayoutHeader: typeof import('ant-design-vue/es')['LayoutHeader']
     ALayoutSider: typeof import('ant-design-vue/es')['LayoutSider']
     AMenu: typeof import('ant-design-vue/es')['Menu']
+    AMenuItem: typeof import('ant-design-vue/es')['MenuItem']
     AppContainer: typeof import('./../components/AppContainer.vue')['default']
     ATypographyTitle: typeof import('ant-design-vue/es')['TypographyTitle']
     RouteMenu: typeof import('./../components/RouteMenu.vue')['default']

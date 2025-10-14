@@ -1,47 +1,45 @@
 <script lang="ts" setup>
-import { MailOutlined, AppstoreOutlined } from '@ant-design/icons-vue'
+// import { MailOutlined, AppstoreOutlined } from '@ant-design/icons-vue'
 import { MenuProps } from 'ant-design-vue'
 
-const items = ref<MenuProps['items']>([
-  {
-    key: 'mail',
-    icon: () => h(MailOutlined),
-    label: '硬件信息',
-    title: '硬件信息'
-  },
-  {
-    key: 'app',
-    icon: () => h(AppstoreOutlined),
-    label: '系统调整',
-    title: '系统调整'
-  },
-  {
-    key: 'alipay',
-    icon: () => h(AppstoreOutlined),
-    label: '工具箱',
-    title: '工具箱'
-  }
-])
-const selectedKeys = ref<string[]>(['1'])
-const openKeys = ref<string[]>(['sub1'])
+const router = useRouter()
+const routes = computed(() => router.getRoutes().sort((a, b) => a.meta.weight - b.meta.weight))
+
+console.log(routes)
+
+const selectedKeys = ref<string[]>([])
+
 const handleClick: MenuProps['onClick'] = (e) => {
-  console.log('click', e)
+  router.push(e.key.toString())
 }
-watch(openKeys, (val) => {
-  console.log('openKeys', val)
+
+watch(router.currentRoute, (val) => {
+  selectedKeys.value = [router.currentRoute.value.path]
+  console.log('current route', val)
+})
+watch(selectedKeys, (val) => {
+  console.log('selectedKeys', val)
 })
 </script>
 
 <template>
-  <a-menu
-    v-model:open-keys="openKeys"
-    v-model:selected-keys="selectedKeys"
+  <AMenu
+    :selected-keys="selectedKeys"
     class="route-menu no-drag"
     mode="inline"
-    :items="items"
     @click="handleClick"
   >
-  </a-menu>
+    <AMenuItem
+      v-for="route in routes.sort((a, b) => a.meta.weight - b.meta.weight)"
+      :key="route.path"
+      :title="route.meta.name"
+    >
+      <template #icon>
+        <i :class="`iconfont ${route.meta.icon}`" style="font-size: 20px"></i>
+      </template>
+      {{ route.meta.name }}
+    </AMenuItem>
+  </AMenu>
 </template>
 
 <style lang="less" scoped>

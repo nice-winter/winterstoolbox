@@ -8,6 +8,9 @@ const maximize = () => {
     }
   })
 }
+
+const isMaximized = ref(false)
+
 const minimize = window.api.windowControl.minimize
 const close = window.api.windowControl.close
 </script>
@@ -15,13 +18,13 @@ const close = window.api.windowControl.close
 <template>
   <a-flex class="window-control-area only-top" justify="flex-end" align="flex-start">
     <div class="window-control-area__btn" @click="minimize">
-      <i class="iconfont suoxiao"></i>
+      <i class="iconfont min"></i>
     </div>
     <div class="window-control-area__btn" @click="maximize">
-      <i class="iconfont quanping"></i>
+      <i :class="`iconfont ${isMaximized ? 'unmax' : 'max'}`"></i>
     </div>
     <div class="window-control-area__btn" @click="close">
-      <i class="iconfont tuichu"></i>
+      <i class="iconfont close"></i>
     </div>
   </a-flex>
 </template>
