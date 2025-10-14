@@ -14,11 +14,13 @@ declare module 'vue' {
     ALayoutContent: typeof import('ant-design-vue/es')['LayoutContent']
     ALayoutHeader: typeof import('ant-design-vue/es')['LayoutHeader']
     ALayoutSider: typeof import('ant-design-vue/es')['LayoutSider']
+    AMenu: typeof import('ant-design-vue/es')['Menu']
+    AppContainer: typeof import('./../components/AppContainer.vue')['default']
     ATypographyTitle: typeof import('ant-design-vue/es')['TypographyTitle']
-    NavigationMenu: typeof import('./../components/NavigationMenu.vue')['default']
+    RouteMenu: typeof import('./../components/RouteMenu.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
-    Versions: typeof import('./../components/Versions.vue')['default']
+    Scrollbar: typeof import('./../components/Scrollbar/Scrollbar.vue')['default']
     WindowControlMenu: typeof import('./../components/WindowControlMenu.vue')['default']
   }
 }

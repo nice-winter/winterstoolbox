@@ -34,7 +34,6 @@ const close = window.api.windowControl.close
   right: 0;
 
   .window-control-area__btn {
-    -webkit-app-region: no-drag;
     width: 32px;
     height: 28px;
     padding: 8px 8px;
@@ -46,12 +45,21 @@ const close = window.api.windowControl.close
     }
 
     &:hover {
-      background-color: #ccc;
+      background-color: var(--hover-color);
+    }
+
+    &:active {
+      background-color: var(--active-color);
     }
 
     &:hover:last-child {
       color: #fff;
-      background-color: #c42b1c;
+      background-color: var(--hover-color-red);
+    }
+
+    &:active:last-child {
+      color: #fff;
+      background-color: var(--active-color-red);
     }
   }
 }

@@ -31,6 +31,11 @@ function createMainWindow() {
 
   mainWindow.setBackgroundMaterial('acrylic')
 
+  mainWindow.hookWindowMessage(0x0116, () => {
+    mainWindow.setEnabled(false)
+    mainWindow.setEnabled(true)
+  })
+
   mainWindow.on('ready-to-show', () => {
     mainWindow.show()
   })

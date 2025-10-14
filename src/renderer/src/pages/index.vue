@@ -6,12 +6,13 @@ const ping = async () => {
 </script>
 
 <template>
-  <div class="text">
+  <div v-for="i in 30" :key="i" class="text">
     Build an Electron app with
     <span class="vue">Vue</span>
     and
     <span class="ts">TypeScript</span>
   </div>
+
   <p class="tip">Please try pressing <code>F12</code> to open the devTool</p>
 
   <div class="actions">
