@@ -93,8 +93,8 @@ const progressManager = {
 export function useProgress() {
   const route = useRoute()
 
-  // 响应式获取当前路由的进度值
-  const getCurrentProgressState = () => {
+  // 获取当前路由的响应式进度条状态
+  const getCurrentRouteProgressState = () => {
     return progressStore.states.get(route.path)
   }
 
@@ -125,13 +125,14 @@ export function useProgress() {
 
   // 对外暴露的 API
   return {
-    // 操作函数
+    /** 开始指定路由的进度条状态，如过不提供路由路径则默认为当前路由 */
     start: (routePath?: string, message?: string) => {
       const path = routePath || route.path
-      // console.log('开始进度条:', path)
+      // console.log('开始进度:', path)
       progressStore.states.set(path, { current: 0.1, message }) // 设置为一个小的初始值，让进度条可见
     },
 
+    /** 设置指定路由的进度条状态，如过不提供路由路径则默认为当前路由 */
     set: (progressState: ProgressState, routePath?: string) => {
       const path = routePath || route.path
       // console.log('设置进度:', path, value)
@@ -142,21 +143,23 @@ export function useProgress() {
       }
     },
 
+    /** 完成指定路由的进度条状态，如过不提供路由路径则默认为当前路由 */
     done: (routePath?: string, message?: string) => {
       const path = routePath || route.path
       // console.log('完成进度条:', path)
       progressStore.states.set(path, { current: 1, message })
     },
 
+    /** 响应式获取指定路由的进度条状态，如过不提供路由路径则默认为当前路由 */
     get: (routePath?: string) => progressStore.states.get(routePath || route.path),
 
-    // 状态查询
+    /** 响应式查询当前路由是否存在正在运行的进度条 */
     currentRouteHasProgress: computed(() => progressStore.currentRouteHasProgress.value),
 
-    // 获取当前路由的进度状态
-    currentProgress: computed(() => getCurrentProgressState()),
+    /** 响应式获取当前路由的进度条状态 */
+    currentRouteProgress: computed(() => getCurrentRouteProgressState()),
 
-    // 获取所有进度状态（用于调试）
+    /** 获取所有进度状态（用于调试）  */
     getAllProgressStates: () => new Map(progressStore.states)
   }
 }
