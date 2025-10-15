@@ -45,23 +45,25 @@ export function useLoadingMessageGenerator() {
     '加载字体资源'
   ]
 
-  return function () {
-    // 随机决定是否重复上一条消息 (约20%的概率重复)
-    const shouldRepeat = Math.random() < 0.2 && lastMessage !== ''
+  return {
+    inc: function () {
+      // 随机决定是否重复上一条消息 (约20%的概率重复)
+      const shouldRepeat = Math.random() < 0.2 && lastMessage !== ''
 
-    const message = shouldRepeat
-      ? lastMessage
-      : loadingMessages[Math.floor(Math.random() * loadingMessages.length)]
-    lastMessage = message
+      const message = shouldRepeat
+        ? lastMessage
+        : loadingMessages[Math.floor(Math.random() * loadingMessages.length)]
+      lastMessage = message
 
-    // 生成递增幅度：0 或 0.01-0.05 之间的随机值
-    const increment = Math.random() < 0.3 ? 0 : Math.random() * 0.04 + 0.01
-    progress = Math.min(1, progress + increment)
+      // 生成递增幅度：0 或 0.01-0.05 之间的随机值
+      const increment = Math.random() < 0.3 ? 0 : Math.random() * 0.04 + 0.01
+      progress = Math.min(1, progress + increment)
 
-    return {
-      message: message,
-      progress: parseFloat(progress.toFixed(2)), // 保留2位小数
-      reset: () => (progress = 0)
-    }
+      return {
+        message: message,
+        progress: parseFloat(progress.toFixed(2)) // 保留2位小数
+      }
+    },
+    reset: () => (progress = 0)
   }
 }

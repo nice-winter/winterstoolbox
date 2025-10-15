@@ -16,10 +16,10 @@ const handleClick: MenuProps['onClick'] = (e) => {
 
 watch(router.currentRoute, (val) => {
   selectedKeys.value = [router.currentRoute.value.path]
-  console.log('current route', val)
+  // console.log('current route', val)
 })
 watch(selectedKeys, (val) => {
-  console.log('selectedKeys', val)
+  // console.log('selectedKeys', val)
 })
 </script>
 
