@@ -19,6 +19,7 @@ declare module 'vue' {
     AMenuItem: typeof import('ant-design-vue/es')['MenuItem']
     AppContainer: typeof import('./../components/AppContainer.vue')['default']
     ASpin: typeof import('ant-design-vue/es')['Spin']
+    ATag: typeof import('ant-design-vue/es')['Tag']
     ATypographyText: typeof import('ant-design-vue/es')['TypographyText']
     ATypographyTitle: typeof import('ant-design-vue/es')['TypographyTitle']
     LoadingOutlined: typeof import('@ant-design/icons-vue')['LoadingOutlined']

@@ -15,7 +15,7 @@ const progress = useProgress()
         <div class="header__title">
           <slot name="headerTitle"></slot>
           <Spin :show="progress.currentRouteHasProgress.value" style="margin-left: 20px">
-            {{ progress.currentProgress.value?.message }}
+            {{ progress.currentRouteProgress.value?.message }}
           </Spin>
         </div>
 

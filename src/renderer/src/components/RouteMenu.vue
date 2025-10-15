@@ -1,9 +1,10 @@
 <script lang="ts" setup>
-// import { MailOutlined, AppstoreOutlined } from '@ant-design/icons-vue'
-import { MenuProps } from 'ant-design-vue'
+import { useProgress } from '@/common/useProgress'
+import type { MenuProps } from 'ant-design-vue'
 
 const router = useRouter()
 const routes = computed(() => router.getRoutes().sort((a, b) => a.meta.weight - b.meta.weight))
+const progress = useProgress()
 
 console.log(routes)
 
@@ -38,6 +39,11 @@ watch(selectedKeys, (val) => {
         <i :class="`iconfont ${route.meta.icon}`" style="font-size: 20px"></i>
       </template>
       {{ route.meta.name }}
+
+      <Spin
+        :show="progress.routeHasProgress(route.path).value"
+        style="float: inline-end; margin: 6px 0px"
+      />
     </AMenuItem>
   </AMenu>
 </template>
@@ -50,7 +56,7 @@ watch(selectedKeys, (val) => {
 
   :deep(.ant-menu-item) {
     transition: none;
-    padding-left: 12px !important;
+    padding: 0 12px !important;
     height: 34px;
     line-height: 34px;
 
@@ -65,6 +71,10 @@ watch(selectedKeys, (val) => {
 
     .anticon + span {
       margin-inline-start: 8px;
+    }
+
+    :deep(.route-menu__tag) {
+      background: #32a0f64a;
     }
   }
 
