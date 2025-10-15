@@ -78,9 +78,9 @@ const progressManager = {
     }
   },
 
-  // 检查當前頁面是否有活跃的进度条，表示正在加載中
-  checkActiveProgress(path: string): boolean {
-    const currentRouteProgressState = progressStore.states.get(path)
+  // 检查指定路由是否有活跃的进度条，表示正在加載中
+  checkRouteHasProgress(routePath: string): boolean {
+    const currentRouteProgressState = progressStore.states.get(routePath)
 
     return (
       typeof currentRouteProgressState !== 'undefined' &&
@@ -105,7 +105,9 @@ export function useProgress() {
       const progressState = progressStore.states.get(newPath)
 
       progressManager.updateState(newPath, progressState)
-      progressStore.currentRouteHasProgress.value = progressManager.checkActiveProgress(route.path)
+      progressStore.currentRouteHasProgress.value = progressManager.checkRouteHasProgress(
+        route.path
+      )
     },
     { immediate: true }
   )
@@ -118,7 +120,8 @@ export function useProgress() {
       const progressState = progressStore.states.get(currentPath)
 
       progressManager.updateState(currentPath, progressState)
-      progressStore.currentRouteHasProgress.value = progressManager.checkActiveProgress(currentPath)
+      progressStore.currentRouteHasProgress.value =
+        progressManager.checkRouteHasProgress(currentPath)
     },
     { immediate: true }
   )
@@ -152,6 +155,9 @@ export function useProgress() {
 
     /** 响应式获取指定路由的进度条状态，如过不提供路由路径则默认为当前路由 */
     get: (routePath?: string) => progressStore.states.get(routePath || route.path),
+
+    routeHasProgress: (routePath?: string) =>
+      computed(() => progressManager.checkRouteHasProgress(routePath || route.path)),
 
     /** 响应式查询当前路由是否存在正在运行的进度条 */
     currentRouteHasProgress: computed(() => progressStore.currentRouteHasProgress.value),
