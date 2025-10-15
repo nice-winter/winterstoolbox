@@ -14,27 +14,27 @@ const route = useRoute()
 const routePath = unref(route.path)
 
 const progress = useProgress()
-const value = ref(0)
-
 const loadingMessageGenerator = useLoadingMessageGenerator()
-
-let t: NodeJS.Timeout | 0 = 0
-
-const clrT = () => {
-  clearInterval(t)
-  t = 0
-  value.value = 0
-}
+const timer = ref<number>(0)
 
 const setT = () => {
-  if (t || value.value >= 1) {
-    clrT()
+  if (timer.value > 0) {
+    window.clearTimeout(timer.value)
+    timer.value = 0
+  } else {
+    timer.value = window.setInterval(updateProgress, 1000)
   }
-  t = setInterval(() => {
-    const load = loadingMessageGenerator()
-    progress.set(load.progress, routePath)
-    if (value.value >= 1) clrT()
-  }, 1000)
+}
+
+const updateProgress = () => {
+  const load = loadingMessageGenerator()
+
+  if (load.progress >= 1) {
+    load.reset()
+    return
+  }
+
+  progress.set(load.progress, routePath)
 }
 
 const ping = async () => {
@@ -44,7 +44,7 @@ const ping = async () => {
 </script>
 
 <template>
-  <AButton @click="setT()">SET</AButton>
+  <AButton @click="setT">{{ timer ? 'CLEAR' : 'SET' }}</AButton>
   <div v-for="i in 30" :key="i" class="text">
     Build an Electron app with
     <span class="vue">Vue</span>

@@ -3,14 +3,14 @@ import type { Ref } from 'vue'
 
 interface ProgressState {
   progress: ReturnType<typeof useNProgress> | null
-  hasProgress: Ref<boolean>
+  currentRouteHasProgress: Ref<boolean>
   progressStates: Map<string, number>
 }
 
 // 状态管理
 const state: ProgressState = {
   progress: null,
-  hasProgress: ref(false),
+  currentRouteHasProgress: ref(false),
   progressStates: reactive(new Map<string, number>())
 }
 
@@ -24,7 +24,6 @@ const progressManager = {
       trickle: false,
       parent: '#app-container__content'
     })
-    // state.hasProgress.value = true
   },
 
   // 更新进度条状态
@@ -72,7 +71,7 @@ const progressManager = {
     if (state.progress) {
       state.progress.remove()
       state.progress = null
-      state.hasProgress.value = false
+      state.currentRouteHasProgress.value = false
     }
   },
 
@@ -80,7 +79,7 @@ const progressManager = {
   checkActiveProgress(path: string): boolean {
     const p = state.progressStates.get(path)
 
-    return typeof p !== 'undefined' && p > 0
+    return typeof p !== 'undefined' && p > 0 && p < 1
   }
 }
 
@@ -96,31 +95,25 @@ export function useProgress() {
   watch(
     () => route.path,
     (newPath) => {
-      // console.log('路由变化:', newPath)
       const progressValue = state.progressStates.get(newPath) || 0
-      // console.log('路由对应的进度值:', progressValue)
+
       progressManager.updateProgress(progressValue, newPath)
-      // 更新 hasProgress 状态
-      state.hasProgress.value = progressManager.checkActiveProgress(route.path)
+      state.currentRouteHasProgress.value = progressManager.checkActiveProgress(route.path)
     },
     { immediate: true }
   )
 
   // 监听进度状态变化 - 当某个路由的进度值变化时，如果它是当前路由就更新进度条
   watch(
-    () => state.progressStates,
+    () => Array.from(state.progressStates.entries()),
     () => {
       const currentPath = route.path
       const progressValue = state.progressStates.get(currentPath) || 0
-      // console.log('进度状态变化, 当前路由:', currentPath, '进度值:', progressValue)
 
-      // 只有当前路由的进度变化才更新进度条显示
       progressManager.updateProgress(progressValue, currentPath)
-
-      // 更新 hasProgress 状态
-      state.hasProgress.value = progressManager.checkActiveProgress(currentPath)
+      state.currentRouteHasProgress.value = progressManager.checkActiveProgress(currentPath)
     },
-    { immediate: true, deep: true }
+    { immediate: true }
   )
 
   // 对外暴露的 API
@@ -151,7 +144,7 @@ export function useProgress() {
     get: (routePath?: string) => state.progressStates.get(routePath || route.path),
 
     // 状态查询
-    hasProgress: computed(() => state.hasProgress.value),
+    currentRouteHasProgress: computed(() => state.currentRouteHasProgress.value),
 
     // 获取当前路由的进度状态
     currentProgress: computed(() => getCurrentProgress()),

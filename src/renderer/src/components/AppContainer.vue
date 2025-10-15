@@ -14,7 +14,7 @@ const progress = useProgress()
       <a-layout-header class="header">
         <div class="header__title">
           <slot name="headerTitle"></slot>
-          <a-spin v-show="progress.hasProgress.value" style="margin-left: 10px">
+          <a-spin v-show="progress.currentRouteHasProgress.value" style="margin-left: 10px">
             <template #indicator>
               <LoadingOutlined style="font-size: 16px" />
             </template>
