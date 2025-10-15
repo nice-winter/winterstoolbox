@@ -20,6 +20,7 @@ declare module 'vue' {
     AppContainer: typeof import('./../components/AppContainer.vue')['default']
     ASpin: typeof import('ant-design-vue/es')['Spin']
     ATypographyTitle: typeof import('ant-design-vue/es')['TypographyTitle']
+    LoadingOutlined: typeof import('@ant-design/icons-vue')['LoadingOutlined']
     RouteMenu: typeof import('./../components/RouteMenu.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']

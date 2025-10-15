@@ -7,6 +7,7 @@ definePage({
   }
 })
 
+import { useLoadingMessageGenerator } from '@/common/test'
 import { useProgress } from '@/common/useProgress'
 
 const route = useRoute()
@@ -14,6 +15,8 @@ const routePath = unref(route.path)
 
 const progress = useProgress()
 const value = ref(0)
+
+const loadingMessageGenerator = useLoadingMessageGenerator()
 
 let t: NodeJS.Timeout | 0 = 0
 
@@ -28,7 +31,8 @@ const setT = () => {
     clrT()
   }
   t = setInterval(() => {
-    progress.set((value.value = value.value + 0.05), routePath)
+    const load = loadingMessageGenerator()
+    progress.set(load.progress, routePath)
     if (value.value >= 1) clrT()
   }, 1000)
 }

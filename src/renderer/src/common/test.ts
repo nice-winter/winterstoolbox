@@ -1,4 +1,4 @@
-export function createLoadingMessageGenerator() {
+export function useLoadingMessageGenerator() {
   let progress = 0
   let lastMessage = ''
 
