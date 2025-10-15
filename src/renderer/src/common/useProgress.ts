@@ -2,84 +2,91 @@ import { useNProgress } from '@vueuse/integrations/useNProgress'
 import type { Ref } from 'vue'
 
 interface ProgressState {
-  progress: ReturnType<typeof useNProgress> | null
+  value: number
+  message?: string
+}
+
+interface ProgressStore {
+  nprogress: ReturnType<typeof useNProgress> | null
+  states: Map<string, number>
   currentRouteHasProgress: Ref<boolean>
-  progressStates: Map<string, number>
 }
 
 // 状态管理
-const state: ProgressState = {
-  progress: null,
-  currentRouteHasProgress: ref(false),
-  progressStates: reactive(new Map<string, number>())
+const progressStore: ProgressStore = {
+  nprogress: null,
+  states: reactive(new Map<string, number>()),
+  currentRouteHasProgress: ref(false)
 }
 
 // 进度条管理函数
 const progressManager = {
   // 初始化进度条
-  initProgress(value: number): void {
-    if (state.progress) return
+  createNProgress(value: number): void {
+    if (progressStore.nprogress) return
 
-    state.progress = useNProgress(value || null, {
+    progressStore.nprogress = useNProgress(value || null, {
       trickle: false,
       parent: '#app-container__content'
     })
   },
 
   // 更新进度条状态
-  updateProgress(value: number, routePath: string): void {
-    // console.log(state.progress, 'updateProgress:', value)
-
+  updateState(value: number, routePath: string): void {
     if (value <= 0) {
-      this.resetProgress(routePath)
+      this.resetState(routePath)
     } else if (value >= 1) {
-      this.completeProgress(routePath)
+      this.completeState(routePath)
     } else {
-      this.setProgress(value, routePath)
+      this.setState(value, routePath)
     }
   },
 
   // 重置进度条
-  resetProgress(routePath: string): void {
-    state.progressStates.delete(routePath)
-    this.cleanupProgress()
+  resetState(routePath: string): void {
+    progressStore.states.delete(routePath)
+    this.destoryNProgress()
   },
 
   // 完成进度条
-  completeProgress(routePath: string): void {
-    if (!state.progress) return
+  completeState(routePath: string): void {
+    if (!progressStore.nprogress) return
 
-    state.progress.done()
+    progressStore.nprogress.done()
     setTimeout(() => {
-      state.progressStates.delete(routePath)
-      this.cleanupProgress()
+      progressStore.states.delete(routePath)
+      this.destoryNProgress()
     }, 500)
   },
 
   // 设置进度值
-  setProgress(value: number, routePath: string): void {
-    if (!state.progress) {
-      this.initProgress(value)
+  setState(value: number, routePath: string): void {
+    if (!progressStore.nprogress) {
+      this.createNProgress(value)
     } else {
-      state.progress.progress.value = value
+      progressStore.nprogress.progress.value = value
     }
-    state.progressStates.set(routePath, value)
+    progressStore.states.set(routePath, value)
   },
 
   // 清理进度条实例
-  cleanupProgress(): void {
-    if (state.progress) {
-      state.progress.remove()
-      state.progress = null
-      state.currentRouteHasProgress.value = false
+  destoryNProgress(): void {
+    if (progressStore.nprogress) {
+      progressStore.nprogress.remove()
+      progressStore.nprogress = null
+      progressStore.currentRouteHasProgress.value = false
     }
   },
 
   // 检查當前頁面是否有活跃的进度条，表示正在加載中
   checkActiveProgress(path: string): boolean {
-    const p = state.progressStates.get(path)
+    const currentRouteProgressState = progressStore.states.get(path)
 
-    return typeof p !== 'undefined' && p > 0 && p < 1
+    return (
+      typeof currentRouteProgressState !== 'undefined' &&
+      currentRouteProgressState > 0 &&
+      currentRouteProgressState < 1
+    )
   }
 }
 
@@ -88,30 +95,30 @@ export function useProgress() {
 
   // 响应式获取当前路由的进度值
   const getCurrentProgress = (): number => {
-    return state.progressStates.get(route.path) || 0
+    return progressStore.states.get(route.path) || 0
   }
 
   // 监听路由变化 - 当路由切换时，显示对应路由的进度状态
   watch(
     () => route.path,
     (newPath) => {
-      const progressValue = state.progressStates.get(newPath) || 0
+      const progressValue = progressStore.states.get(newPath) || 0
 
-      progressManager.updateProgress(progressValue, newPath)
-      state.currentRouteHasProgress.value = progressManager.checkActiveProgress(route.path)
+      progressManager.updateState(progressValue, newPath)
+      progressStore.currentRouteHasProgress.value = progressManager.checkActiveProgress(route.path)
     },
     { immediate: true }
   )
 
   // 监听进度状态变化 - 当某个路由的进度值变化时，如果它是当前路由就更新进度条
   watch(
-    () => Array.from(state.progressStates.entries()),
+    () => Array.from(progressStore.states.entries()),
     () => {
       const currentPath = route.path
-      const progressValue = state.progressStates.get(currentPath) || 0
+      const progressValue = progressStore.states.get(currentPath) || 0
 
-      progressManager.updateProgress(progressValue, currentPath)
-      state.currentRouteHasProgress.value = progressManager.checkActiveProgress(currentPath)
+      progressManager.updateState(progressValue, currentPath)
+      progressStore.currentRouteHasProgress.value = progressManager.checkActiveProgress(currentPath)
     },
     { immediate: true }
   )
@@ -122,34 +129,34 @@ export function useProgress() {
     start: (routePath?: string) => {
       const path = routePath || route.path
       // console.log('开始进度条:', path)
-      state.progressStates.set(path, 0.1) // 设置为一个小的初始值，让进度条可见
+      progressStore.states.set(path, 0.1) // 设置为一个小的初始值，让进度条可见
     },
 
     set: (value: number, routePath?: string) => {
       const path = routePath || route.path
       // console.log('设置进度:', path, value)
-      state.progressStates.set(path, value)
+      progressStore.states.set(path, value)
 
       if (value >= 1) {
-        setTimeout(() => state.progressStates.delete(path), 500)
+        setTimeout(() => progressStore.states.delete(path), 500)
       }
     },
 
     done: (routePath?: string) => {
       const path = routePath || route.path
       // console.log('完成进度条:', path)
-      state.progressStates.set(path, 1)
+      progressStore.states.set(path, 1)
     },
 
-    get: (routePath?: string) => state.progressStates.get(routePath || route.path),
+    get: (routePath?: string) => progressStore.states.get(routePath || route.path),
 
     // 状态查询
-    currentRouteHasProgress: computed(() => state.currentRouteHasProgress.value),
+    currentRouteHasProgress: computed(() => progressStore.currentRouteHasProgress.value),
 
     // 获取当前路由的进度状态
     currentProgress: computed(() => getCurrentProgress()),
 
     // 获取所有进度状态（用于调试）
-    getAllProgressStates: () => new Map(state.progressStates)
+    getAllProgressStates: () => new Map(progressStore.states)
   }
 }
