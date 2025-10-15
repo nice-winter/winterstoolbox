@@ -34,7 +34,7 @@ const updateProgress = () => {
     return
   }
 
-  progress.set(load.progress, routePath)
+  progress.set({ current: load.progress, message: load.message }, routePath)
 }
 </script>
 

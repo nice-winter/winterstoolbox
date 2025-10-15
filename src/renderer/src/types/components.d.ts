@@ -19,12 +19,14 @@ declare module 'vue' {
     AMenuItem: typeof import('ant-design-vue/es')['MenuItem']
     AppContainer: typeof import('./../components/AppContainer.vue')['default']
     ASpin: typeof import('ant-design-vue/es')['Spin']
+    ATypographyText: typeof import('ant-design-vue/es')['TypographyText']
     ATypographyTitle: typeof import('ant-design-vue/es')['TypographyTitle']
     LoadingOutlined: typeof import('@ant-design/icons-vue')['LoadingOutlined']
     RouteMenu: typeof import('./../components/RouteMenu.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     Scrollbar: typeof import('./../components/Scrollbar.vue')['default']
+    Spin: typeof import('./../components/Spin.vue')['default']
     WindowControlMenu: typeof import('./../components/WindowControlMenu.vue')['default']
   }
 }
