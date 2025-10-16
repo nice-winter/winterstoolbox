@@ -6,6 +6,13 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "2166872",
+      "name": "显示器",
+      "font_class": "display",
+      "unicode": "e6b2",
+      "unicode_decimal": 59058
+    },
+    {
       "icon_id": "37552061",
       "name": "内存",
       "font_class": "ram",
@@ -57,7 +64,7 @@
     {
       "icon_id": "26616990",
       "name": "显卡",
-      "font_class": "xianka",
+      "font_class": "gpu",
       "unicode": "e9fb",
       "unicode_decimal": 59899
     },
