@@ -3,6 +3,8 @@ import { app, BrowserWindow } from 'electron'
 import { electronApp, is, optimizer } from '@electron-toolkit/utils'
 import { initIpcMain } from './ipcMain'
 import { createWindow } from './window/createWindow'
+import { initDatabase } from './helper/db'
+import si from 'systeminformation'
 
 export let mainWindow: BrowserWindow
 
@@ -52,3 +54,5 @@ app.on('window-all-closed', () => {
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
+
+console.log(await si.memLayout())

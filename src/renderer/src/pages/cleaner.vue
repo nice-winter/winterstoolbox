@@ -60,4 +60,11 @@ const updateProgress = () => {
     <AButton type="default" danger @click="reset">Reset</AButton>
     <AButton type="default" @click="done">Done</AButton>
   </a-space>
+
+  <div v-for="i in 30" :key="i" class="text">
+    Build an Electron app with
+    <span class="vue">Vue</span>
+    and
+    <span class="ts">TypeScript</span>
+  </div>
 </template>
