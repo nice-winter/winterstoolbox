@@ -59,6 +59,9 @@ importers:
       '@vitejs/plugin-vue':
         specifier: ^6.0.1
         version: 6.0.1(rolldown-vite@7.1.16(@types/node@24.8.0)(esbuild@0.25.10)(less@4.4.2)(yaml@2.8.1))(vue@3.5.22(typescript@5.9.3))
+      '@vue/eslint-config-prettier':
+        specifier: ^10.2.0
+        version: 10.2.0(eslint@9.37.0)(prettier@3.6.2)
       '@vueuse/core':
         specifier: ^14.0.0-beta.1
         version: 14.0.0-beta.1(vue@3.5.22(typescript@5.9.3))
@@ -989,6 +992,12 @@ packages:
 
   '@vue/devtools-shared@8.0.2':
     resolution: {integrity: sha512-mLU0QVdy5Lp40PMGSixDw/Kbd6v5dkQXltd2r+mdVQV7iUog2NlZuLxFZApFZ/mObUBDhoCpf0T3zF2FWWdeHw==}
+
+  '@vue/eslint-config-prettier@10.2.0':
+    resolution: {integrity: sha512-GL3YBLwv/+b86yHcNNfPJxOTtVFJ4Mbc9UU3zR+KVoG7SwGTjPT+32fXamscNumElhcpXW3mT0DgzS9w32S7Bw==}
+    peerDependencies:
+      eslint: '>= 8.21.0'
+      prettier: '>= 3.0.0'
 
   '@vue/language-core@3.1.1':
     resolution: {integrity: sha512-qjMY3Q+hUCjdH+jLrQapqgpsJ0rd/2mAY02lZoHG3VFJZZZKLjAlV+Oo9QmWIT4jh8+Rx8RUGUi++d7T9Wb6Mw==}
@@ -4223,6 +4232,15 @@ snapshots:
   '@vue/devtools-shared@8.0.2':
     dependencies:
       rfdc: 1.4.1
+
+  '@vue/eslint-config-prettier@10.2.0(eslint@9.37.0)(prettier@3.6.2)':
+    dependencies:
+      eslint: 9.37.0
+      eslint-config-prettier: 10.1.8(eslint@9.37.0)
+      eslint-plugin-prettier: 5.5.4(eslint-config-prettier@10.1.8(eslint@9.37.0))(eslint@9.37.0)(prettier@3.6.2)
+      prettier: 3.6.2
+    transitivePeerDependencies:
+      - '@types/eslint'
 
   '@vue/language-core@3.1.1(typescript@5.9.3)':
     dependencies:
