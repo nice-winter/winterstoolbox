@@ -1,9 +1,9 @@
 @font-face {
   font-family: "iconfont"; /* Project id 5039659 */
-  src: url('iconfont.woff2?t=1760435966714') format('woff2'),
-       url('iconfont.woff?t=1760435966714') format('woff'),
-       url('iconfont.ttf?t=1760435966714') format('truetype'),
-       url('iconfont.svg?t=1760435966714#iconfont') format('svg');
+  src: url('iconfont.woff2?t=1760598484169') format('woff2'),
+       url('iconfont.woff?t=1760598484169') format('woff'),
+       url('iconfont.ttf?t=1760598484169') format('truetype'),
+       url('iconfont.svg?t=1760598484169#iconfont') format('svg');
 }
 
 .iconfont {
@@ -12,6 +12,58 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.ram:before {
+  content: "\e7ab";
+}
+
+.ram2:before {
+  content: "\e68e";
+}
+
+.nic:before {
+  content: "\e61d";
+}
+
+.pc:before {
+  content: "\e773";
+}
+
+.cpu3:before {
+  content: "\e6b0";
+}
+
+.cpu:before {
+  content: "\e649";
+}
+
+.motherboard:before {
+  content: "\e600";
+}
+
+.xianka:before {
+  content: "\e9fb";
+}
+
+.laptop:before {
+  content: "\e64a";
+}
+
+.battery:before {
+  content: "\e6bf";
+}
+
+.sound:before {
+  content: "\e652";
+}
+
+.hdd:before {
+  content: "\e601";
+}
+
+.cpu2:before {
+  content: "\e7fe";
 }
 
 .wode:before {

@@ -6,6 +6,97 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "37552061",
+      "name": "内存",
+      "font_class": "ram",
+      "unicode": "e7ab",
+      "unicode_decimal": 59307
+    },
+    {
+      "icon_id": "1361523",
+      "name": "内存",
+      "font_class": "ram2",
+      "unicode": "e68e",
+      "unicode_decimal": 59022
+    },
+    {
+      "icon_id": "2193934",
+      "name": "网卡",
+      "font_class": "nic",
+      "unicode": "e61d",
+      "unicode_decimal": 58909
+    },
+    {
+      "icon_id": "4294027",
+      "name": "台式电脑",
+      "font_class": "pc",
+      "unicode": "e773",
+      "unicode_decimal": 59251
+    },
+    {
+      "icon_id": "8474229",
+      "name": "cpu",
+      "font_class": "cpu3",
+      "unicode": "e6b0",
+      "unicode_decimal": 59056
+    },
+    {
+      "icon_id": "13519360",
+      "name": "cpu",
+      "font_class": "cpu",
+      "unicode": "e649",
+      "unicode_decimal": 58953
+    },
+    {
+      "icon_id": "17557613",
+      "name": "主板",
+      "font_class": "motherboard",
+      "unicode": "e600",
+      "unicode_decimal": 58880
+    },
+    {
+      "icon_id": "26616990",
+      "name": "显卡",
+      "font_class": "xianka",
+      "unicode": "e9fb",
+      "unicode_decimal": 59899
+    },
+    {
+      "icon_id": "27598260",
+      "name": "笔记本电脑",
+      "font_class": "laptop",
+      "unicode": "e64a",
+      "unicode_decimal": 58954
+    },
+    {
+      "icon_id": "27622216",
+      "name": "电池",
+      "font_class": "battery",
+      "unicode": "e6bf",
+      "unicode_decimal": 59071
+    },
+    {
+      "icon_id": "38321781",
+      "name": "音量",
+      "font_class": "sound",
+      "unicode": "e652",
+      "unicode_decimal": 58962
+    },
+    {
+      "icon_id": "39502742",
+      "name": "硬盘",
+      "font_class": "hdd",
+      "unicode": "e601",
+      "unicode_decimal": 58881
+    },
+    {
+      "icon_id": "41786013",
+      "name": "cpu",
+      "font_class": "cpu2",
+      "unicode": "e7fe",
+      "unicode_decimal": 59390
+    },
+    {
       "icon_id": "20530278",
       "name": "我的",
       "font_class": "wode",
