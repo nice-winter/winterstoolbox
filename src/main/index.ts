@@ -1,5 +1,6 @@
 import { join } from 'node:path'
-import { app, BrowserWindow } from 'electron'
+import { fileURLToPath } from 'node:url'
+import { app, BrowserWindow } from 'electron/main'
 import { electronApp, is, optimizer } from '@electron-toolkit/utils'
 import { initIpcMain } from './ipcMain'
 import { createWindow } from './window/createWindow'
@@ -39,7 +40,7 @@ app.whenReady().then(() => {
   if (is.dev && !app.isPackaged && process.env['ELECTRON_RENDERER_URL']) {
     mainWindow.loadURL(process.env['ELECTRON_RENDERER_URL'])
   } else {
-    mainWindow.loadFile(join(__dirname, '../renderer/index.html'))
+    mainWindow.loadFile(fileURLToPath(new URL('../renderer/index.html', import.meta.url)))
   }
 })
 

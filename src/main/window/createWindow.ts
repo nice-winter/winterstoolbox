@@ -1,7 +1,7 @@
-import { join } from 'node:path'
 import { shell, BrowserWindow } from 'electron'
 
 import icon from '../../../resources/icon.png?asset'
+import { fileURLToPath } from 'node:url'
 
 /**
  * Create the main browser window.
@@ -18,7 +18,7 @@ function createWindow(width?: number, height?: number, minWidth?: number, minHei
     autoHideMenuBar: true,
     ...(process.platform === 'linux' ? { icon } : {}),
     webPreferences: {
-      preload: join(__dirname, '../preload/index.mjs'),
+      preload: fileURLToPath(new URL('../preload/index.mjs', import.meta.url)),
       sandbox: false
     },
 
