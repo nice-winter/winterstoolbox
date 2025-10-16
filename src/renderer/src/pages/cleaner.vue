@@ -8,7 +8,7 @@ definePage({
 })
 
 import { useLoadingMessageGenerator } from '@/common/test'
-import { useProgress } from '@/common/useProgress'
+import { useProgress } from '@components/Progress/useProgress'
 
 const route = useRoute()
 const routePath = unref(route.path)
@@ -41,7 +41,7 @@ const reset = () => {
 const updateProgress = () => {
   const inc = loadingMessageGenerator.inc()
 
-  if (inc.progress >= 1) {
+  if (inc.progress >= 100) {
     reset()
     return
   }

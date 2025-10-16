@@ -1,7 +1,13 @@
 <script setup lang="ts">
-import { useProgress } from '@/common/useProgress'
+//import { useProgress } from '@/common/useProgress'
+import { useProgress } from './Progress/useProgress'
 
-const progress = useProgress()
+// const progress = useProgress()
+const appProgress = useProgress()
+// appProgress.set(20)
+// setTimeout(() => {
+//   appProgress.set(100)
+// }, 5000)
 </script>
 
 <template>
@@ -14,8 +20,8 @@ const progress = useProgress()
       <a-layout-header class="header">
         <div class="header__title">
           <slot name="headerTitle"></slot>
-          <Spin :show="progress.currentRouteHasProgress.value" style="margin-left: 20px">
-            {{ progress.currentRouteProgress.value?.message }}
+          <Spin :show="appProgress.currentRouteHasProgress.value" style="margin-left: 20px">
+            {{ appProgress.currentRouteProgress.value?.message }}
           </Spin>
         </div>
 
@@ -26,8 +32,10 @@ const progress = useProgress()
         <div class="header__bgmask"></div>
       </a-layout-header>
 
-      <a-layout-content id="app-container__content" class="content">
-        <Scrollbar class="content__with-scrollbar" :auto-hide="false" :delay="100">
+      <a-layout-content id="app-container__content" class="content" style="position: relative">
+        <!-- <Progress></Progress> -->
+
+        <Scrollbar class="content__with-scrollbar" :auto-hide="false" :delay="1">
           <slot name="content"></slot>
         </Scrollbar>
       </a-layout-content>
@@ -99,11 +107,11 @@ const progress = useProgress()
         max-height: 100%;
 
         :deep(.scrollbar-content) {
-          padding: 0 20px;
+          padding: 20px;
         }
         :deep(.scrollbar-content::after),
         :deep(.scrollbar-content::before) {
-          padding-top: 20px;
+          // padding-top: 20px;
         }
       }
     }

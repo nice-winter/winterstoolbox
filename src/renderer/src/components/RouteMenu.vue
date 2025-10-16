@@ -1,12 +1,10 @@
 <script lang="ts" setup>
-import { useProgress } from '@/common/useProgress'
+import { useProgress } from '@components/Progress/useProgress'
 import type { MenuProps } from 'ant-design-vue'
 
 const router = useRouter()
 const routes = computed(() => router.getRoutes().sort((a, b) => a.meta.weight - b.meta.weight))
 const progress = useProgress()
-
-console.log(routes)
 
 const selectedKeys = ref<string[]>([])
 

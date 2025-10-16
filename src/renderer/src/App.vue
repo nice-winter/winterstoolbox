@@ -2,8 +2,8 @@
 const route = useRoute()
 
 onBeforeMount(async () => {
-  const hwinfo = await window.api.hwinfo()
-  console.log(hwinfo)
+  // const hwinfo = await window.api.hwinfo()
+  // console.log(hwinfo)
 })
 </script>
 

@@ -61,7 +61,7 @@ export function useLoadingMessageGenerator() {
 
       return {
         message: message,
-        progress: parseFloat(progress.toFixed(2)) // 保留2位小数
+        progress: parseFloat(progress.toFixed(2)) * 100 // 保留2位小数
       }
     },
     reset: () => (progress = 0)
