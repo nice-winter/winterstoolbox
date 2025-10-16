@@ -40,7 +40,7 @@ watch(selectedKeys, (val) => {
 
       <Spin
         :show="progress.routeHasProgress(route.path).value"
-        style="float: inline-end; margin: 6px 0px"
+        style="float: inline-end; margin: 8px 0px"
       />
     </AMenuItem>
   </AMenu>
