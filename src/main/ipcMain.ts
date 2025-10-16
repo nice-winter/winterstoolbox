@@ -1,4 +1,4 @@
-import { ipcMain } from 'electron'
+import { ipcMain } from 'electron/main'
 import { hwinfo } from './helper/hwinfo'
 import { mainWindow } from '.'
 

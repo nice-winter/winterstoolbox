@@ -1,7 +1,8 @@
-import { shell, BrowserWindow } from 'electron'
+import { fileURLToPath } from 'node:url'
+import { shell } from 'electron/common'
+import { BrowserWindow } from 'electron/main'
 
 import icon from '../../../resources/icon.png?asset'
-import { fileURLToPath } from 'node:url'
 
 /**
  * Create the main browser window.
