@@ -6,7 +6,7 @@ settings:
 
 patchedDependencies:
   systeminformation:
-    hash: f001ad02621b36170bb2baeb02641f98b0c1e9807a6ade901192b1c6ad542b01
+    hash: 7404de86d23346cdc8b767e53b12ccf07ab988d8a415feb36df1b3dd10efd5ca
     path: patches/systeminformation.patch
 
 importers:
@@ -45,7 +45,7 @@ importers:
         version: 3.0.3(typescript@5.9.3)(vue@3.5.22(typescript@5.9.3))
       systeminformation:
         specifier: ^5.27.11
-        version: 5.27.11(patch_hash=f001ad02621b36170bb2baeb02641f98b0c1e9807a6ade901192b1c6ad542b01)
+        version: 5.27.11(patch_hash=7404de86d23346cdc8b767e53b12ccf07ab988d8a415feb36df1b3dd10efd5ca)
       vue:
         specifier: ^3.5.22
         version: 3.5.22(typescript@5.9.3)
@@ -6273,7 +6273,7 @@ snapshots:
     dependencies:
       '@pkgr/core': 0.2.9
 
-  systeminformation@5.27.11(patch_hash=f001ad02621b36170bb2baeb02641f98b0c1e9807a6ade901192b1c6ad542b01): {}
+  systeminformation@5.27.11(patch_hash=7404de86d23346cdc8b767e53b12ccf07ab988d8a415feb36df1b3dd10efd5ca): {}
 
   tar@6.2.1:
     dependencies:

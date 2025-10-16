@@ -1,3 +1,76 @@
+diff --git a/lib/cpu.js b/lib/cpu.js
+index ef8d7b743f826a3cc2e3a6ae5a2f8ff90e894ed3..4b0820ec9d546bb7a8fb6ba2b8f4d7a01598a999 100644
+--- a/lib/cpu.js
++++ b/lib/cpu.js
+@@ -635,7 +635,11 @@ function cpuBrandManufacturer(res) {
+   res.manufacturer = cpuManufacturer(res.brand);
+ 
+   let parts = res.brand.split(' ');
+-  parts.shift();
++
++  if (!/^\d+th$/.test(parts[0]) && !parts.includes('Intel')) {
++    parts.shift();
++  }
++
+   res.brand = parts.join(' ');
+   return res;
+ }
+diff --git a/lib/index.d.ts b/lib/index.d.ts
+index e38786f42f867e47eaf7310922e9df3a7f2707cf..d249530ac46b8fa553a7ba3ba7e6e9fa46abe904 100644
+--- a/lib/index.d.ts
++++ b/lib/index.d.ts
+@@ -139,6 +139,7 @@ export namespace Systeminformation {
+     clockSpeed: number | null;
+     formFactor: string;
+     manufacturer?: string;
++    manufacturerId?: string;
+     partNum: string;
+     serialNum: string;
+     voltageConfigured: number | null;
+diff --git a/lib/memory.js b/lib/memory.js
+index 620f2d6251f49b9b4ae71417b873b84fd05bac2b..9a2a2e84d37fdc58ba5ff03a049b0a5c1db56ff5 100644
+--- a/lib/memory.js
++++ b/lib/memory.js
+@@ -348,6 +348,7 @@ function memLayout(callback) {
+                   clockSpeed: (util.getValue(lines, 'Configured Clock Speed:') ? parseInt(util.getValue(lines, 'Configured Clock Speed:'), 10) : (util.getValue(lines, 'Speed:') ? parseInt(util.getValue(lines, 'Speed:'), 10) : null)),
+                   formFactor: util.getValue(lines, 'Form Factor:'),
+                   manufacturer: getManufacturer(util.getValue(lines, 'Manufacturer:')),
++                  manufacturerId: util.getValue(lines, 'Manufacturer:'),
+                   partNum: util.getValue(lines, 'Part Number:'),
+                   serialNum: util.getValue(lines, 'Serial Number:'),
+                   voltageConfigured: parseFloat(util.getValue(lines, 'Configured Voltage:')) || null,
+@@ -460,6 +461,7 @@ function memLayout(callback) {
+                   clockSpeed: parseInt(util.getValue(lines, '          Speed:'), 10),
+                   formFactor: '',
+                   manufacturer: getManufacturer(util.getValue(lines, '          Manufacturer:')),
++                  manufacturerId: util.getValue(lines, '          Manufacturer:'),
+                   partNum: util.getValue(lines, '          Part Number:'),
+                   serialNum: util.getValue(lines, '          Serial Number:'),
+                   voltageConfigured: null,
+@@ -475,6 +477,7 @@ function memLayout(callback) {
+                   clockSpeed: 0,
+                   formFactor: '',
+                   manufacturer: '',
++                  manufacturerId: '',
+                   partNum: '',
+                   serialNum: '',
+                   voltageConfigured: null,
+@@ -498,6 +501,7 @@ function memLayout(callback) {
+                 clockSpeed: null,
+                 formFactor: 'SOC',
+                 manufacturer: getManufacturer(manufacturerId),
++                manufacturerId,
+                 partNum: '',
+                 serialNum: '',
+                 voltageConfigured: null,
+@@ -541,6 +545,7 @@ function memLayout(callback) {
+                     clockSpeed: parseInt(util.getValue(lines, 'ConfiguredClockSpeed', ':'), 10) || parseInt(util.getValue(lines, 'Speed', ':'), 10) || 0,
+                     formFactor: FormFactors[parseInt(util.getValue(lines, 'FormFactor', ':'), 10) || 0],
+                     manufacturer: getManufacturer(util.getValue(lines, 'Manufacturer', ':')),
++                    manufacturerId: util.getValue(lines, 'Manufacturer', ':'),
+                     partNum: util.getValue(lines, 'PartNumber', ':'),
+                     serialNum: util.getValue(lines, 'SerialNumber', ':'),
+                     voltageConfigured: (parseInt(util.getValue(lines, 'ConfiguredVoltage', ':'), 10) || 0) / 1000.0,
 diff --git a/lib/util.js b/lib/util.js
 index f3b5dd7e40e811ce848abcc0181446ad82fb10f9..e182b78b0ae45507c1316236051f35a81fae364d 100644
 --- a/lib/util.js
