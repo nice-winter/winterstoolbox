@@ -13,10 +13,10 @@ const progressStore: ProgressStore = {
   states: reactive(new Map<string, ProgressState>())
 }
 
-export function useProgress() {
-  const container = document.createElement('div')
-  container.id = 'app-progress-container'
+const container = document.createElement('div')
+container.id = 'app-progress-container'
 
+export function useProgress() {
   const route = useRoute()
 
   const current = ref(0)
@@ -24,15 +24,20 @@ export function useProgress() {
   onMounted(() => {
     const { appContext } = getCurrentInstance()!
 
-    const exists = document.querySelector(container.id)
-    if (!exists) {
+    const exists = ref(false)
+
+    if (!exists.value) {
       const parent = document.querySelector('#app-container__content') || document.body
       parent.appendChild(container)
 
       const vnode = createVNode(Progress, { current: current })
       vnode.appContext = appContext
       render(vnode, container)
+
+      exists.value = true
     }
+
+    console.log(exists.value)
   })
 
   /**
