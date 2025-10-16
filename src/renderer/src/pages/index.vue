@@ -7,78 +7,171 @@ definePage({
   }
 })
 
-import { useLoadingMessageGenerator } from '@/common/test'
+import { memDisplayText, numberToChinese } from '@/common/helper'
+import { useLoadingMessageGenerator, useTestHwinfo } from '@/common/test'
 import { useProgress } from '@components/Progress/useProgress'
+
+type ExtractPromise<T> = T extends Promise<infer U> ? U : T
+type Hwinfo = ExtractPromise<ReturnType<typeof useTestHwinfo>>
 
 const route = useRoute()
 const routePath = unref(route.path)
 
-const progress = useProgress()
-const loadingMessageGenerator = useLoadingMessageGenerator()
-const timer = ref<number>(0)
+const hwinfo = ref<Hwinfo>()
 
-const start = () => {
-  if (timer.value > 0) {
-    window.clearTimeout(timer.value)
-    timer.value = 0
-  } else {
-    timer.value = window.setInterval(updateProgress, 1000)
-    updateProgress()
+const cpu = computed(() => {
+  const vendor = hwinfo.value?.cpu.brand
+  const c = hwinfo.value?.cpu.physicalCores || 0
+  const t = hwinfo.value?.cpu.cores || 0
+
+  // return `${vendor} / ${numberToChinese(c)}核心${numberToChinese(t)}线程 / ${hwinfo.value?.cpu.speedMax}GHz`
+  return {
+    vendor,
+    ct: `${c}核心${t}线程`,
+    spd: `${hwinfo.value?.cpu.speedMax}GHz`
   }
-}
+})
 
-const done = () => {
-  window.clearTimeout(timer.value)
-  timer.value = 0
-  loadingMessageGenerator.reset()
-  progress.done(routePath)
-}
+const memText = computed(() => memDisplayText(hwinfo.value!.memLayout))
 
-const reset = () => {
-  loadingMessageGenerator.reset()
-}
+const gpu = computed(() => {
+  hwinfo.value?.graphics.controllers.map((g) => null)
+})
 
-const updateProgress = () => {
-  const inc = loadingMessageGenerator.inc()
-
-  if (inc.progress >= 100) {
-    reset()
-    return
-  }
-
-  progress.set({ current: inc.progress, message: inc.message }, routePath)
-}
-
-const ping = async () => {
-  const res = await window.api.ping()
-  console.log('From ipcMain:', res)
-}
+onBeforeMount(async () => {
+  hwinfo.value = useTestHwinfo()
+  console.log(hwinfo.value)
+})
 </script>
 
 <template>
-  <a-space>
-    <AButton :type="timer ? 'default' : 'primary'" @click="start">
-      {{ timer ? 'Pause' : 'Start' }}
-    </AButton>
-    <AButton type="default" danger @click="reset">Reset</AButton>
-    <AButton type="default" @click="done">Done</AButton>
-  </a-space>
+  <a-collapse :bordered="false" class="hwinfo-collapse">
+    <a-collapse-panel key="1" :show-arrow="false">
+      <template #header>
+        <i class="iconfont cpu" />
+        <span class="hw-name">处理器</span>
+        <a-typography-paragraph class="hw-model" copyable>
+          {{ cpu.vendor }}
+          <a-tag color="blue">{{ cpu.ct }}</a-tag>
+          <a-tag color="blue">{{ cpu.spd }}</a-tag>
+        </a-typography-paragraph>
+      </template>
 
-  <div v-for="i in 30" :key="i" class="text">
-    Build an Electron app with
-    <span class="vue">Vue</span>
-    and
-    <span class="ts">TypeScript</span>
-  </div>
+      <p>1</p>
+    </a-collapse-panel>
 
-  <p class="tip">Please try pressing <code>F12</code> to open the devTool</p>
+    <a-collapse-panel key="2" :show-arrow="false">
+      <template #header>
+        <i class="iconfont ram" />
+        <span class="hw-name">内存</span>
+        <a-space direction="vertical">
+          <a-typography-paragraph class="hw-model" copyable>
+            {{ `${memText.displayText[0]}` }}
+            <a-tag color="blue">{{ `${memText.totalSize}GB` }}</a-tag>
+          </a-typography-paragraph>
+        </a-space>
+      </template>
 
-  <div class="actions">
-    <div class="action">
-      <a href="https://electron-vite.org/" target="_blank" rel="noreferrer">Documentation</a>
-    </div>
-    <div class="action">
-      <a target="_blank" rel="noreferrer" @click="ping">Send IPC</a>
-    </div>
-  </div>
+      <p>2</p>
+    </a-collapse-panel>
+
+    <a-collapse-panel key="3" :show-arrow="false">
+      <template #header>
+        <i class="iconfont motherboard" />
+        <span class="hw-name">主板</span>
+        <a-typography-paragraph class="hw-model" copyable>
+          {{ `${hwinfo?.baseboard.manufacturer} ${hwinfo?.baseboard.model}` }}
+        </a-typography-paragraph>
+      </template>
+
+      <p>3</p>
+    </a-collapse-panel>
+
+    <a-collapse-panel key="4" :show-arrow="false">
+      <template #header>
+        <i class="iconfont gpu" />
+        <span class="hw-name">显卡</span>
+      </template>
+
+      <p>4</p>
+    </a-collapse-panel>
+
+    <a-collapse-panel key="5" :show-arrow="false">
+      <template #header>
+        <i class="iconfont hdd" />
+        <span class="hw-name">主硬盘</span>
+      </template>
+
+      <p>5</p>
+    </a-collapse-panel>
+
+    <a-collapse-panel key="6" :show-arrow="false">
+      <template #header>
+        <i class="iconfont display" />
+        <span class="hw-name">显示器</span>
+      </template>
+
+      <p>6</p>
+    </a-collapse-panel>
+
+    <a-collapse-panel key="7" :show-arrow="false">
+      <template #header>
+        <i class="iconfont nic" />
+        <span class="hw-name">网卡</span>
+      </template>
+
+      <p>7</p>
+    </a-collapse-panel>
+
+    <a-collapse-panel key="8" :show-arrow="false">
+      <template #header>
+        <i class="iconfont sound" />
+        <span class="hw-name">声卡</span>
+      </template>
+
+      <p>8</p>
+    </a-collapse-panel>
+  </a-collapse>
 </template>
+
+<style lang="css" scoped>
+.hwinfo-collapse {
+  background-color: #fff;
+
+  .ant-collapse-item {
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  :deep(.ant-collapse-header) {
+    padding-inline-start: 16px !important;
+    padding: 16px;
+
+    i {
+      font-size: 22px;
+      line-height: 22px;
+      vertical-align: bottom;
+      margin-right: 12px;
+      color: #1677ff;
+    }
+
+    .ant-space {
+      float: right;
+    }
+
+    .hw-name {
+      display: inline-block;
+      text-align: right;
+      width: 42px;
+    }
+
+    .hw-model {
+      float: right;
+      margin-bottom: unset;
+    }
+  }
+
+  & > .ant-collapse-item:last-child {
+    border-bottom: unset;
+  }
+}
+</style>
