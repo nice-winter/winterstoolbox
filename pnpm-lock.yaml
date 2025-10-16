@@ -13,9 +13,6 @@ importers:
 
   .:
     dependencies:
-      '@ant-design/icons-vue':
-        specifier: ^7.0.1
-        version: 7.0.1(vue@3.5.22(typescript@5.9.3))
       '@electron-toolkit/preload':
         specifier: ^3.0.2
         version: 3.0.2(electron@38.3.0)
@@ -25,12 +22,6 @@ importers:
       '@vscode/sudo-prompt':
         specifier: ^9.3.1
         version: 9.3.1
-      '@vueuse/core':
-        specifier: ^14.0.0-beta.1
-        version: 14.0.0-beta.1(vue@3.5.22(typescript@5.9.3))
-      ant-design-vue:
-        specifier: ^4.2.6
-        version: 4.2.6(vue@3.5.22(typescript@5.9.3))
       axios:
         specifier: ^1.12.2
         version: 1.12.2
@@ -40,19 +31,16 @@ importers:
       iconv-lite:
         specifier: ^0.7.0
         version: 0.7.0
-      pinia:
-        specifier: ^3.0.3
-        version: 3.0.3(typescript@5.9.3)(vue@3.5.22(typescript@5.9.3))
+      lodash-es:
+        specifier: ^4.17.21
+        version: 4.17.21
       systeminformation:
         specifier: ^5.27.11
         version: 5.27.11(patch_hash=7404de86d23346cdc8b767e53b12ccf07ab988d8a415feb36df1b3dd10efd5ca)
-      vue:
-        specifier: ^3.5.22
-        version: 3.5.22(typescript@5.9.3)
-      vue-router:
-        specifier: ^4.6.3
-        version: 4.6.3(vue@3.5.22(typescript@5.9.3))
     devDependencies:
+      '@ant-design/icons-vue':
+        specifier: ^7.0.1
+        version: 7.0.1(vue@3.5.22(typescript@5.9.3))
       '@electron-toolkit/eslint-config-prettier':
         specifier: 3.0.0
         version: 3.0.0(eslint@9.37.0)(prettier@3.6.2)
@@ -62,12 +50,21 @@ importers:
       '@electron-toolkit/tsconfig':
         specifier: ^2.0.0
         version: 2.0.0(@types/node@24.8.0)
+      '@types/lodash-es':
+        specifier: ^4.17.12
+        version: 4.17.12
       '@types/node':
         specifier: ^24.8.0
         version: 24.8.0
       '@vitejs/plugin-vue':
         specifier: ^6.0.1
         version: 6.0.1(rolldown-vite@7.1.16(@types/node@24.8.0)(esbuild@0.25.10)(less@4.4.2)(yaml@2.8.1))(vue@3.5.22(typescript@5.9.3))
+      '@vueuse/core':
+        specifier: ^14.0.0-beta.1
+        version: 14.0.0-beta.1(vue@3.5.22(typescript@5.9.3))
+      ant-design-vue:
+        specifier: ^4.2.6
+        version: 4.2.6(vue@3.5.22(typescript@5.9.3))
       core-util-is:
         specifier: ^1.0.3
         version: 1.0.3
@@ -92,6 +89,9 @@ importers:
       less:
         specifier: ^4.4.2
         version: 4.4.2
+      pinia:
+        specifier: ^3.0.3
+        version: 3.0.3(typescript@5.9.3)(vue@3.5.22(typescript@5.9.3))
       prettier:
         specifier: ^3.6.2
         version: 3.6.2
@@ -113,9 +113,15 @@ importers:
       vite-plugin-vue-devtools:
         specifier: ^8.0.2
         version: 8.0.2(rolldown-vite@7.1.16(@types/node@24.8.0)(esbuild@0.25.10)(less@4.4.2)(yaml@2.8.1))(vue@3.5.22(typescript@5.9.3))
+      vue:
+        specifier: ^3.5.22
+        version: 3.5.22(typescript@5.9.3)
       vue-eslint-parser:
         specifier: ^10.2.0
         version: 10.2.0(eslint@9.37.0)
+      vue-router:
+        specifier: ^4.6.3
+        version: 4.6.3(vue@3.5.22(typescript@5.9.3))
       vue-tsc:
         specifier: ^3.1.1
         version: 3.1.1(typescript@5.9.3)
@@ -815,6 +821,12 @@ packages:
 
   '@types/keyv@3.1.4':
     resolution: {integrity: sha512-BQ5aZNSCpj7D6K2ksrRCTmKRLEpnPvWDiLPfoGyhZ++8YtiK9d/3DBKPJgry359X/P1PfruyYwvnvwFjuEiEIg==}
+
+  '@types/lodash-es@4.17.12':
+    resolution: {integrity: sha512-0NgftHUcV4v34VhXm8QBSftKVXtbkBG3ViCjs6+eJ5a6y6Mi/jiFGPc1sC7QK+9BFhWrURE3EOggmWaSxL9OzQ==}
+
+  '@types/lodash@4.17.20':
+    resolution: {integrity: sha512-H3MHACvFUEiujabxhaI/ImO6gUrd8oOurg7LQtS7mbwIXA/cUqWrvBsaeJ23aZEPk1TAYkurjfMbSELfoCXlGA==}
 
   '@types/ms@2.1.0':
     resolution: {integrity: sha512-GsCCIZDE/p3i96vtEqx+7dBUGXrc7zeSK3wwPHIaRThS+9OhWIXRqzs4d6k1SVU8g91DrNRWxWUGhp5KXQb2VA==}
@@ -3947,6 +3959,12 @@ snapshots:
   '@types/keyv@3.1.4':
     dependencies:
       '@types/node': 24.8.0
+
+  '@types/lodash-es@4.17.12':
+    dependencies:
+      '@types/lodash': 4.17.20
+
+  '@types/lodash@4.17.20': {}
 
   '@types/ms@2.1.0': {}
 
