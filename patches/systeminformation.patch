@@ -15,6 +15,55 @@ index ef8d7b743f826a3cc2e3a6ae5a2f8ff90e894ed3..4b0820ec9d546bb7a8fb6ba2b8f4d7a0
    res.brand = parts.join(' ');
    return res;
  }
+diff --git a/lib/filesystem.js b/lib/filesystem.js
+index cbc90c94675b46d9e48e6984409bfed6cea9b3f8..12a6598457780fa1be32b5e6be123c5571172bbf 100644
+--- a/lib/filesystem.js
++++ b/lib/filesystem.js
+@@ -1431,6 +1431,7 @@ function diskLayout(callback) {
+           const workload = [];
+           workload.push(util.powerShell('Get-CimInstance Win32_DiskDrive | select Caption,Size,Status,PNPDeviceId,DeviceId,BytesPerSector,TotalCylinders,TotalHeads,TotalSectors,TotalTracks,TracksPerCylinder,SectorsPerTrack,FirmwareRevision,SerialNumber,InterfaceType | fl'));
+           workload.push(util.powerShell('Get-PhysicalDisk | select BusType,MediaType,FriendlyName,Model,SerialNumber,Size | fl'));
++          workload.push(util.powerShell(`Get-Disk -Number (Get-Partition -DriveLetter ($env:SystemDrive -replace ':', '')).DiskNumber | ConvertTo-Json -Depth 1`));
+           if (util.smartMonToolsInstalled()) {
+             try {
+               const smartDev = JSON.parse(execSync('smartctl --scan -j').toString());
+@@ -1446,6 +1447,7 @@ function diskLayout(callback) {
+           util.promiseAll(
+             workload
+           ).then((data) => {
++            const primaryDevice = JSON.parse(data.results[2]);
+             let devices = data.results[0].toString().split(/\n\s*\n/);
+             devices.forEach(function (device) {
+               let lines = device.split('\r\n');
+@@ -1453,11 +1455,13 @@ function diskLayout(callback) {
+               const status = util.getValue(lines, 'Status', ':').trim().toLowerCase();
+               if (size) {
+                 result.push({
++                  primary: false,
+                   device: util.getValue(lines, 'DeviceId', ':'),  // changed from PNPDeviceId to DeviceID (be be able to match devices)
+                   type: device.indexOf('SSD') > -1 ? 'SSD' : 'HD',  // just a starting point ... better: MSFT_PhysicalDisk - Media Type ... see below
+                   name: util.getValue(lines, 'Caption', ':'),
+                   vendor: getVendorFromModel(util.getValue(lines, 'Caption', ':', true).trim()),
+                   size: parseInt(size),
++                  PNPDeviceId: util.getValue(lines, 'PNPDeviceId', ':'),
+                   bytesPerSector: parseInt(util.getValue(lines, 'BytesPerSector', ':')),
+                   totalCylinders: parseInt(util.getValue(lines, 'TotalCylinders', ':')),
+                   totalHeads: parseInt(util.getValue(lines, 'TotalHeads', ':')),
+@@ -1497,6 +1501,14 @@ function diskLayout(callback) {
+                 }
+               }
+             });
++            result = result.map(r => {
++              const path = primaryDevice.Path.toLowerCase().replaceAll('#', '\\');
++              const pnpId = r.PNPDeviceId.toLowerCase();
++              return {
++                ...r,
++                primary: path.includes(pnpId)
++              }
++            });
+             // S.M.A.R.T
+             data.results.shift();
+             data.results.shift();
 diff --git a/lib/graphics.js b/lib/graphics.js
 index 6833bdc9d9b17e42c764026ee5aa601c663204f8..58f863c81c443a86736418dc0b9128a529dd39b3 100644
 --- a/lib/graphics.js
@@ -105,7 +154,7 @@ index 6833bdc9d9b17e42c764026ee5aa601c663204f8..58f863c81c443a86736418dc0b9128a5
  
  exports.graphics = graphics;
 diff --git a/lib/index.d.ts b/lib/index.d.ts
-index e38786f42f867e47eaf7310922e9df3a7f2707cf..21bf2f2f24d9b9f8276d2483eb5fc5cc9a0a56a4 100644
+index e38786f42f867e47eaf7310922e9df3a7f2707cf..0d176bdeb77ede774de5916347ac38e7d23bbe19 100644
 --- a/lib/index.d.ts
 +++ b/lib/index.d.ts
 @@ -139,6 +139,7 @@ export namespace Systeminformation {
@@ -116,7 +165,15 @@ index e38786f42f867e47eaf7310922e9df3a7f2707cf..21bf2f2f24d9b9f8276d2483eb5fc5cc
      partNum: string;
      serialNum: string;
      voltageConfigured: number | null;
-@@ -303,6 +304,7 @@ export namespace Systeminformation {
+@@ -261,6 +262,7 @@ export namespace Systeminformation {
+   }
+ 
+   interface DiskLayoutData {
++    primary: boolean;
+     device: string;
+     type: string;
+     name: string;
+@@ -303,6 +305,7 @@ export namespace Systeminformation {
    interface GraphicsData {
      controllers: GraphicsControllerData[];
      displays: GraphicsDisplayData[];
@@ -124,7 +181,7 @@ index e38786f42f867e47eaf7310922e9df3a7f2707cf..21bf2f2f24d9b9f8276d2483eb5fc5cc
    }
  
    interface GraphicsControllerData {
-@@ -360,6 +362,16 @@ export namespace Systeminformation {
+@@ -360,6 +363,16 @@ export namespace Systeminformation {
      currentRefreshRate: number | null;
    }
  

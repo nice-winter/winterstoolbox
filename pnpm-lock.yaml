@@ -6,7 +6,7 @@ settings:
 
 patchedDependencies:
   systeminformation:
-    hash: b78cf4d15c90f149ba46817392008e369ee84475c8fe6b5958a8e8e3584eb08b
+    hash: d814b6a79132d0956cd5a75536c9bf6e971c26e9e2c55e0037d509a900ee8962
     path: patches/systeminformation.patch
 
 importers:
@@ -36,7 +36,7 @@ importers:
         version: 4.17.21
       systeminformation:
         specifier: ^5.27.11
-        version: 5.27.11(patch_hash=b78cf4d15c90f149ba46817392008e369ee84475c8fe6b5958a8e8e3584eb08b)
+        version: 5.27.11(patch_hash=d814b6a79132d0956cd5a75536c9bf6e971c26e9e2c55e0037d509a900ee8962)
     devDependencies:
       '@ant-design/icons-vue':
         specifier: ^7.0.1
@@ -6305,7 +6305,7 @@ snapshots:
     dependencies:
       '@pkgr/core': 0.2.9
 
-  systeminformation@5.27.11(patch_hash=b78cf4d15c90f149ba46817392008e369ee84475c8fe6b5958a8e8e3584eb08b): {}
+  systeminformation@5.27.11(patch_hash=d814b6a79132d0956cd5a75536c9bf6e971c26e9e2c55e0037d509a900ee8962): {}
 
   tar@6.2.1:
     dependencies:
