@@ -45,7 +45,6 @@
     "core-util-is": "^1.0.3",
     "electron": "^38.3.0",
     "electron-builder": "^26.0.12",
-    "electron-devtools-installer": "^4.0.0",
     "electron-vite": "^4.0.1",
     "eslint": "^9.37.0",
     "eslint-plugin-vue": "^10.5.1",
