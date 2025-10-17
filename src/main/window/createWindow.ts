@@ -1,8 +1,19 @@
 import { fileURLToPath } from 'node:url'
 import { shell } from 'electron/common'
-import { BrowserWindow } from 'electron/main'
+import { BrowserWindow, type BrowserWindowConstructorOptions } from 'electron/main'
 
 import icon from '../../../resources/icon.png?asset'
+
+const baseOptions: BrowserWindowConstructorOptions = {
+  frame: false,
+  show: false,
+  fullscreenable: false,
+  autoHideMenuBar: true,
+  hasShadow: true,
+  titleBarStyle: 'hidden',
+  ...(process.platform === 'linux' ? { icon } : {})
+  // ...(process.platform !== 'darwin' ? { titleBarOverlay: true } : {})
+}
 
 /**
  * Create a browser window.
@@ -19,19 +30,11 @@ function createWindow(
     height,
     minWidth,
     minHeight,
-    frame: false,
-    show: false,
-    fullscreenable: false,
-    autoHideMenuBar: true,
-    ...(process.platform === 'linux' ? { icon } : {}),
+    ...baseOptions,
     webPreferences: {
       preload: preload || fileURLToPath(new URL('../preload/index.mjs', import.meta.url)),
       sandbox: false
-    },
-
-    hasShadow: true,
-    titleBarStyle: 'hidden'
-    // ...(process.platform !== 'darwin' ? { titleBarOverlay: true } : {})
+    }
   })
 
   window.setBackgroundMaterial('acrylic')
@@ -53,4 +56,4 @@ function createWindow(
   return window
 }
 
-export { createWindow }
+export { baseOptions, createWindow }
