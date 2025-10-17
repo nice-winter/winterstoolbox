@@ -543,6 +543,7 @@ export function useTestHwinfo() {
     ],
     diskLayout: [
       {
+        primary: true,
         device: '\\\\.\\PHYSICALDRIVE2',
         type: 'SSD',
         name: 'INTEL SSDPEKKW512G8',
@@ -562,6 +563,7 @@ export function useTestHwinfo() {
         temperature: null
       },
       {
+        primary: false,
         device: '\\\\.\\PHYSICALDRIVE1',
         type: 'SSD',
         name: 'Phison SM280128GPTCB2T-S112610',
@@ -581,6 +583,7 @@ export function useTestHwinfo() {
         temperature: null
       },
       {
+        primary: false,
         device: '\\\\.\\PHYSICALDRIVE0',
         type: 'HD',
         name: 'HGST HTS721010A9E630',

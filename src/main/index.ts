@@ -35,4 +35,5 @@ app.on('window-all-closed', () => {
   }
 })
 
-console.log(await si.blockDevices())
+const info = await si.graphics()
+console.log(info.monitors)
