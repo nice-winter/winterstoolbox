@@ -45,6 +45,7 @@ export default defineConfig(
     ignores: [],
     rules: {
       'no-undef': 'off',
+      'no-irregular-whitespace': 'off',
       'vue/require-default-prop': 'off',
       'vue/multi-word-component-names': 'off',
       'vue/block-lang': [

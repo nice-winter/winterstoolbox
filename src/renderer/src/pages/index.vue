@@ -45,93 +45,109 @@ onBeforeMount(async () => {
 </script>
 
 <template>
-  <a-collapse :bordered="false" class="hwinfo-collapse">
-    <a-collapse-panel key="1" :show-arrow="false">
+  <ACollapse :bordered="false" class="hwinfo-collapse">
+    <ACollapsePanel key="1" :show-arrow="false">
       <template #header>
         <i class="iconfont cpu" />
         <span class="hw-name">处理器</span>
-        <a-typography-paragraph class="hw-model" copyable>
+
+        <ATypographyParagraph class="hw-model" copyable>
           {{ cpu.vendor }}
-          <a-tag color="blue">{{ cpu.ct }}</a-tag>
-          <a-tag color="blue">{{ cpu.spd }}</a-tag>
-        </a-typography-paragraph>
+
+          <span class="hw-model__tags">
+            <ATag color="blue" class="hw-model__tags__tag">{{ cpu.ct }}</ATag>
+            <ATag color="blue" class="hw-model__tags__tag">{{ cpu.spd }}</ATag>
+          </span>
+        </ATypographyParagraph>
       </template>
 
       <p>1</p>
-    </a-collapse-panel>
+    </ACollapsePanel>
 
-    <a-collapse-panel key="2" :show-arrow="false">
+    <ACollapsePanel key="2" :show-arrow="false">
       <template #header>
         <i class="iconfont ram" />
-        <span class="hw-name">内存</span>
-        <a-space direction="vertical">
-          <a-typography-paragraph class="hw-model" copyable>
+        <span class="hw-name">内　存</span>
+
+        <ASpace direction="vertical">
+          <ATypographyParagraph class="hw-model" copyable>
             {{ `${memText.displayText[0]}` }}
-            <a-tag color="blue">{{ `${memText.totalSize}GB` }}</a-tag>
-          </a-typography-paragraph>
-        </a-space>
+
+            <a-typography-text
+              v-if="memText.displayText.length > 1"
+              type="secondary"
+              style="margin-right: 4px"
+            >
+              {{ `...等共${hwinfo?.memLayout.length}条` }}
+            </a-typography-text>
+
+            <span class="hw-model__tags">
+              <ATag color="blue" class="hw-model__tags__tag">{{ `${memText.totalSize}GB` }}</ATag>
+            </span>
+          </ATypographyParagraph>
+        </ASpace>
       </template>
 
       <p>2</p>
-    </a-collapse-panel>
+    </ACollapsePanel>
 
-    <a-collapse-panel key="3" :show-arrow="false">
+    <ACollapsePanel key="3" :show-arrow="false">
       <template #header>
         <i class="iconfont motherboard" />
-        <span class="hw-name">主板</span>
-        <a-typography-paragraph class="hw-model" copyable>
+        <span class="hw-name">主　板</span>
+        <ATypographyParagraph class="hw-model" copyable>
           {{ `${hwinfo?.baseboard.manufacturer} ${hwinfo?.baseboard.model}` }}
-        </a-typography-paragraph>
+        </ATypographyParagraph>
       </template>
 
       <p>3</p>
-    </a-collapse-panel>
+    </ACollapsePanel>
 
-    <a-collapse-panel key="4" :show-arrow="false">
+    <ACollapsePanel key="4" :show-arrow="false">
       <template #header>
         <i class="iconfont gpu" />
-        <span class="hw-name">显卡</span>
+        <span class="hw-name">显　卡</span>
       </template>
 
       <p>4</p>
-    </a-collapse-panel>
+    </ACollapsePanel>
 
-    <a-collapse-panel key="5" :show-arrow="false">
+    <ACollapsePanel key="5" :show-arrow="false">
       <template #header>
         <i class="iconfont hdd" />
         <span class="hw-name">主硬盘</span>
       </template>
 
       <p>5</p>
-    </a-collapse-panel>
+    </ACollapsePanel>
 
-    <a-collapse-panel key="6" :show-arrow="false">
+    <ACollapsePanel key="6" :show-arrow="false">
       <template #header>
         <i class="iconfont display" />
         <span class="hw-name">显示器</span>
       </template>
 
       <p>6</p>
-    </a-collapse-panel>
+    </ACollapsePanel>
 
-    <a-collapse-panel key="7" :show-arrow="false">
+    <ACollapsePanel key="7" :show-arrow="false">
       <template #header>
         <i class="iconfont nic" />
-        <span class="hw-name">网卡</span>
+        <span class="hw-name">网　卡</span>
       </template>
 
       <p>7</p>
-    </a-collapse-panel>
+    </ACollapsePanel>
 
-    <a-collapse-panel key="8" :show-arrow="false">
+    <ACollapsePanel key="8" :show-arrow="false">
       <template #header>
         <i class="iconfont sound" />
-        <span class="hw-name">声卡</span>
+        <span class="hw-name">声　卡</span>
       </template>
 
       <p>8</p>
-    </a-collapse-panel>
-  </a-collapse>
+    </ACollapsePanel>
+  </ACollapse>
 </template>
 
 <style lang="css" scoped>
@@ -167,6 +183,17 @@ onBeforeMount(async () => {
     .hw-model {
       float: right;
       margin-bottom: unset;
+
+      .hw-model__tags {
+        .ant-tag.hw-model__tags__tag {
+          margin: 0;
+          margin-right: 6px;
+
+          &:last-child {
+            margin-inline-end: unset;
+          }
+        }
+      }
     }
   }
 
