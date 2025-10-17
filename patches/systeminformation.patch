@@ -65,7 +65,7 @@ index cbc90c94675b46d9e48e6984409bfed6cea9b3f8..12a6598457780fa1be32b5e6be123c55
              data.results.shift();
              data.results.shift();
 diff --git a/lib/graphics.js b/lib/graphics.js
-index 6833bdc9d9b17e42c764026ee5aa601c663204f8..58f863c81c443a86736418dc0b9128a529dd39b3 100644
+index 6833bdc9d9b17e42c764026ee5aa601c663204f8..9789959a847f2a9e29d566be74964bfb8e3a2005 100644
 --- a/lib/graphics.js
 +++ b/lib/graphics.js
 @@ -839,7 +839,7 @@ function graphics(callback) {
@@ -85,7 +85,7 @@ index 6833bdc9d9b17e42c764026ee5aa601c663204f8..58f863c81c443a86736418dc0b9128a5
  
              if (result.displays.length === 1) {
                if (_resolutionX) {
-@@ -1125,6 +1126,67 @@ function graphics(callback) {
+@@ -1125,6 +1126,61 @@ function graphics(callback) {
      }
      return displays;
    }
@@ -93,30 +93,22 @@ index 6833bdc9d9b17e42c764026ee5aa601c663204f8..58f863c81c443a86736418dc0b9128a5
 +  function parseLinesWindowsMonitorsPowershell(ssections, msections, dsections, tsections, isections) {
 +    let monitors = [];
 +
-+    // const d = dsections.map(dsection => {
-+    //   let vendor = '';
-+    //   let model = '';
-+    //   let deviceID = '';
-+    //   let resolutionX = 0;
-+    //   let resolutionY = 0;
++    const m = msections.map((msection) => {
++      const line = msection.split('\n');
++      const active = util.getValue(line, 'Active').toLowerCase() === 'true';
++      const instanceName = util.getValue(line, 'InstanceName').toLowerCase();
++      const sizeX = util.getValue(line, 'MaxHorizontalImageSize');
++      const sizeY = util.getValue(line, 'MaxVerticalImageSize');
++      const inch = Math.floor((Math.sqrt(sizeX * sizeX + sizeY * sizeY) / 2.54) * 10 ** 1) / 10 ** 1;
 +
-+    //   if (dsection) {
-+    //     const line = dsection.split('\n');
-+    //     vendor = util.getValue(line, 'MonitorManufacturer', ':');
-+    //     model = util.getValue(line, 'Name', ':');
-+    //     deviceID = util.getValue(line, 'PNPDeviceID', ':').replace(/&amp;/g, '&').toLowerCase();
-+    //     resolutionX = util.toInt(util.getValue(line, 'ScreenWidth', ':'));
-+    //     resolutionY = util.toInt(util.getValue(line, 'ScreenHeight', ':'));
-+    //   }
-+
-+    //   return {
-+    //     vendor,
-+    //     model,
-+    //     deviceID,
-+    //     resolutionX,
-+    //     resolutionY
-+    //   }
-+    // });
++      return {
++        active,
++        instanceName,
++        sizeX,
++        sizeY,
++        inch
++      }
++    })
 +
 +    const t = tsections.map(tsection => {
 +      let instanceName = '';
@@ -135,14 +127,16 @@ index 6833bdc9d9b17e42c764026ee5aa601c663204f8..58f863c81c443a86736418dc0b9128a5
 +    });
 +
 +    const i = isections.map(isection => {
-+      const tsection = t.find(_t => _t.instanceName === isection.instanceId.toLowerCase())
-+      let builtin = tsection.videoOutputTechnology === '2147483648'
-+      let connection = videoTypes[tsection.videoOutputTechnology] || ''
++      const msection = m.find(_m => _m.instanceName === isection.instanceId.toLowerCase());
++      const tsection = t.find(_t => _t.instanceName === isection.instanceId.toLowerCase());
++      let builtin = tsection.videoOutputTechnology === '2147483648';
++      let connection = videoTypes[tsection.videoOutputTechnology] || '';
 +
 +      return {
 +        ...isection,
 +        builtin,
-+        connection
++        connection,
++        ...msection
 +      }
 +    });
 +
@@ -154,7 +148,7 @@ index 6833bdc9d9b17e42c764026ee5aa601c663204f8..58f863c81c443a86736418dc0b9128a5
  
  exports.graphics = graphics;
 diff --git a/lib/index.d.ts b/lib/index.d.ts
-index e38786f42f867e47eaf7310922e9df3a7f2707cf..0d176bdeb77ede774de5916347ac38e7d23bbe19 100644
+index e38786f42f867e47eaf7310922e9df3a7f2707cf..ab5f38d20df08d3894475f92cf16c5c8b5a8e681 100644
 --- a/lib/index.d.ts
 +++ b/lib/index.d.ts
 @@ -139,6 +139,7 @@ export namespace Systeminformation {
@@ -177,16 +171,21 @@ index e38786f42f867e47eaf7310922e9df3a7f2707cf..0d176bdeb77ede774de5916347ac38e7
    interface GraphicsData {
      controllers: GraphicsControllerData[];
      displays: GraphicsDisplayData[];
-+    monitors: GraphicsMonitorsData[];
++    monitors: GraphicsMonitorData[];
    }
  
    interface GraphicsControllerData {
-@@ -360,6 +363,16 @@ export namespace Systeminformation {
+@@ -360,6 +363,21 @@ export namespace Systeminformation {
      currentRefreshRate: number | null;
    }
  
-+  interface GraphicsMonitorsData {
++  interface GraphicsMonitorData {
++    active: boolean;
 +    instanceId: string;
++    instanceName: string;
++    inch: number;
++    sizeX: number;
++    sizeY: number;
 +    vendor: string;
 +    code: string;
 +    model: string;
