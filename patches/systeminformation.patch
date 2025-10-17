@@ -15,8 +15,97 @@ index ef8d7b743f826a3cc2e3a6ae5a2f8ff90e894ed3..4b0820ec9d546bb7a8fb6ba2b8f4d7a0
    res.brand = parts.join(' ');
    return res;
  }
+diff --git a/lib/graphics.js b/lib/graphics.js
+index 6833bdc9d9b17e42c764026ee5aa601c663204f8..58f863c81c443a86736418dc0b9128a529dd39b3 100644
+--- a/lib/graphics.js
++++ b/lib/graphics.js
+@@ -839,7 +839,7 @@ function graphics(callback) {
+           workload.push(util.powerShell('Get-CimInstance -Namespace root\\wmi -ClassName WmiMonitorBasicDisplayParams | fl'));
+           workload.push(util.powerShell('Add-Type -AssemblyName System.Windows.Forms; [System.Windows.Forms.Screen]::AllScreens'));
+           workload.push(util.powerShell('Get-CimInstance -Namespace root\\wmi -ClassName WmiMonitorConnectionParams | fl'));
+-          workload.push(util.powerShell('gwmi WmiMonitorID -Namespace root\\wmi | ForEach-Object {(($_.ManufacturerName -notmatch 0 | foreach {[char]$_}) -join "") + "|" + (($_.ProductCodeID -notmatch 0 | foreach {[char]$_}) -join "") + "|" + (($_.UserFriendlyName -notmatch 0 | foreach {[char]$_}) -join "") + "|" + (($_.SerialNumberID -notmatch 0 | foreach {[char]$_}) -join "") + "|" + $_.InstanceName}'));
++          workload.push(util.powerShell('Get-CimInstance -Namespace root\\wmi -ClassName WmiMonitorID | % { $m=($_.ManufacturerName|?{$_-ne0}|%{[char]$_})-join"";$p=($_.ProductCodeID|?{$_-ne0}|%{[char]$_})-join"";$f=($_.UserFriendlyName|?{$_-ne0}|%{[char]$_})-join"";$s=($_.SerialNumberID|?{$_-ne0}|%{[char]$_})-join"";"$m|$p|$f|$s|$($_.InstanceName)" }'));
+ 
+           const nvidiaData = nvidiaDevices();
+ 
+@@ -908,6 +908,7 @@ function graphics(callback) {
+             });
+ 
+             result.displays = parseLinesWindowsDisplaysPowershell(ssections, msections, dsections, tsections, isections);
++            result.monitors = parseLinesWindowsMonitorsPowershell(ssections, msections, dsections, tsections, isections);
+ 
+             if (result.displays.length === 1) {
+               if (_resolutionX) {
+@@ -1125,6 +1126,67 @@ function graphics(callback) {
+     }
+     return displays;
+   }
++
++  function parseLinesWindowsMonitorsPowershell(ssections, msections, dsections, tsections, isections) {
++    let monitors = [];
++
++    // const d = dsections.map(dsection => {
++    //   let vendor = '';
++    //   let model = '';
++    //   let deviceID = '';
++    //   let resolutionX = 0;
++    //   let resolutionY = 0;
++
++    //   if (dsection) {
++    //     const line = dsection.split('\n');
++    //     vendor = util.getValue(line, 'MonitorManufacturer', ':');
++    //     model = util.getValue(line, 'Name', ':');
++    //     deviceID = util.getValue(line, 'PNPDeviceID', ':').replace(/&amp;/g, '&').toLowerCase();
++    //     resolutionX = util.toInt(util.getValue(line, 'ScreenWidth', ':'));
++    //     resolutionY = util.toInt(util.getValue(line, 'ScreenHeight', ':'));
++    //   }
++
++    //   return {
++    //     vendor,
++    //     model,
++    //     deviceID,
++    //     resolutionX,
++    //     resolutionY
++    //   }
++    // });
++
++    const t = tsections.map(tsection => {
++      let instanceName = '';
++      let videoOutputTechnology = '';
++
++      if (tsection) {
++        const line = tsection.split('\n');
++        instanceName = util.getValue(line, 'InstanceName').toLowerCase();
++        videoOutputTechnology = util.getValue(line, 'VideoOutputTechnology');
++      }
++
++      return {
++        instanceName,
++        videoOutputTechnology
++      }
++    });
++
++    const i = isections.map(isection => {
++      const tsection = t.find(_t => _t.instanceName === isection.instanceId.toLowerCase())
++      let builtin = tsection.videoOutputTechnology === '2147483648'
++      let connection = videoTypes[tsection.videoOutputTechnology] || ''
++
++      return {
++        ...isection,
++        builtin,
++        connection
++      }
++    });
++
++    monitors = i;
++
++    return monitors;
++  }
+ }
+ 
+ exports.graphics = graphics;
 diff --git a/lib/index.d.ts b/lib/index.d.ts
-index e38786f42f867e47eaf7310922e9df3a7f2707cf..d249530ac46b8fa553a7ba3ba7e6e9fa46abe904 100644
+index e38786f42f867e47eaf7310922e9df3a7f2707cf..21bf2f2f24d9b9f8276d2483eb5fc5cc9a0a56a4 100644
 --- a/lib/index.d.ts
 +++ b/lib/index.d.ts
 @@ -139,6 +139,7 @@ export namespace Systeminformation {
@@ -27,6 +116,31 @@ index e38786f42f867e47eaf7310922e9df3a7f2707cf..d249530ac46b8fa553a7ba3ba7e6e9fa
      partNum: string;
      serialNum: string;
      voltageConfigured: number | null;
+@@ -303,6 +304,7 @@ export namespace Systeminformation {
+   interface GraphicsData {
+     controllers: GraphicsControllerData[];
+     displays: GraphicsDisplayData[];
++    monitors: GraphicsMonitorsData[];
+   }
+ 
+   interface GraphicsControllerData {
+@@ -360,6 +362,16 @@ export namespace Systeminformation {
+     currentRefreshRate: number | null;
+   }
+ 
++  interface GraphicsMonitorsData {
++    instanceId: string;
++    vendor: string;
++    code: string;
++    model: string;
++    serial: string | null;
++    builtin: boolean;
++    connection: string | null;
++  }
++
+   // 4. Operating System
+ 
+   interface OsData {
 diff --git a/lib/memory.js b/lib/memory.js
 index 620f2d6251f49b9b4ae71417b873b84fd05bac2b..9a2a2e84d37fdc58ba5ff03a049b0a5c1db56ff5 100644
 --- a/lib/memory.js
