@@ -34,7 +34,7 @@ watch(selectedKeys, (val) => {
       :title="route.meta.name"
     >
       <template #icon>
-        <i :class="`iconfont ${route.meta.icon}`" style="font-size: 20px; color: #1677ff"></i>
+        <i :class="`iconfont ${route.meta.icon}`" style="font-size: 20px"></i>
       </template>
       {{ route.meta.name }}
 

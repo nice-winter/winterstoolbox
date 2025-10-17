@@ -2,6 +2,7 @@ type ExtractPromise<T> = T extends Promise<infer U> ? U : T
 type Hwinfo = ExtractPromise<ReturnType<typeof window.api.hwinfo>>
 type MemLayoutData = Hwinfo['memLayout'][0]
 type Gpu = Hwinfo['graphics']['controllers'][0]
+type Monitor = Hwinfo['graphics']['monitors'][0]
 
 export function numberToChinese(num: number) {
   if (num < 0 || num > 9999) {
@@ -102,4 +103,23 @@ export function gpuDisplayText(gpus: Gpu[]) {
         manufacturer
       }
     })
+
+  const displayText = gpuList.map((gpu) => {
+    const party = [gpu.manufacturer, gpu.model, `${(gpu.vram || 0) / 1024}GB`]
+    return party.join(' ')
+  })
+
+  return {
+    displayText,
+    list: gpuList
+  }
+}
+
+export function monitorsDisplayText(monitors: Monitor[]) {
+  const displayText = monitors.map((m) => m.model)
+
+  return {
+    displayText,
+    monitors
+  }
 }

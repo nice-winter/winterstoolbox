@@ -35,4 +35,4 @@ app.on('window-all-closed', () => {
   }
 })
 
-console.log(await si.memLayout())
+console.log(await si.blockDevices())

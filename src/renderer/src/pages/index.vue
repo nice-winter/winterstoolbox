@@ -7,7 +7,12 @@ definePage({
   }
 })
 
-import { memDisplayText, numberToChinese } from '@/common/helper'
+import {
+  gpuDisplayText,
+  memDisplayText,
+  monitorsDisplayText,
+  numberToChinese
+} from '@/common/helper'
 import { useLoadingMessageGenerator, useTestHwinfo } from '@/common/test'
 import { useProgress } from '@components/Progress/useProgress'
 
@@ -24,7 +29,6 @@ const cpu = computed(() => {
   const c = hwinfo.value?.cpu.physicalCores || 0
   const t = hwinfo.value?.cpu.cores || 0
 
-  // return `${vendor} / ${numberToChinese(c)}核心${numberToChinese(t)}线程 / ${hwinfo.value?.cpu.speedMax}GHz`
   return {
     vendor,
     ct: `${c}核心${t}线程`,
@@ -34,8 +38,12 @@ const cpu = computed(() => {
 
 const memText = computed(() => memDisplayText(hwinfo.value!.memLayout))
 
-const gpu = computed(() => {
-  hwinfo.value?.graphics.controllers.map((g) => null)
+const gpuText = computed(() => {
+  return gpuDisplayText(hwinfo.value!.graphics.controllers)
+})
+
+const monitorsText = computed(() => {
+  return monitorsDisplayText(hwinfo.value!.graphics.monitors)
 })
 
 onBeforeMount(async () => {
@@ -73,13 +81,22 @@ onBeforeMount(async () => {
           <ATypographyParagraph class="hw-model" copyable>
             {{ `${memText.displayText[0]}` }}
 
-            <a-typography-text
-              v-if="memText.displayText.length > 1"
-              type="secondary"
-              style="margin-right: 4px"
-            >
-              {{ `...等共${hwinfo?.memLayout.length}条` }}
-            </a-typography-text>
+            <ATooltip placement="bottom">
+              <template #title>
+                <span style="white-space: pre-wrap">
+                  {{ memText.displayText.slice(1).join('\n') }}
+                </span>
+              </template>
+
+              <ATypographyText
+                v-if="memText.displayText.length > 1"
+                type="secondary"
+                style="margin-right: 4px; font-size: 12px"
+                underline
+              >
+                {{ `...等, 共${hwinfo?.memLayout.length}条` }}
+              </ATypographyText>
+            </ATooltip>
 
             <span class="hw-model__tags">
               <ATag color="blue" class="hw-model__tags__tag">{{ `${memText.totalSize}GB` }}</ATag>
@@ -95,8 +112,13 @@ onBeforeMount(async () => {
       <template #header>
         <i class="iconfont motherboard" />
         <span class="hw-name">主　板</span>
+
         <ATypographyParagraph class="hw-model" copyable>
           {{ `${hwinfo?.baseboard.manufacturer} ${hwinfo?.baseboard.model}` }}
+
+          <!-- <span class="hw-model__tags">
+            <ATag color="blue" class="hw-model__tags__tag">{{ `英特尔 H610 芯片组` }}</ATag>
+          </span> -->
         </ATypographyParagraph>
       </template>
 
@@ -107,6 +129,14 @@ onBeforeMount(async () => {
       <template #header>
         <i class="iconfont gpu" />
         <span class="hw-name">显　卡</span>
+
+        <ATypographyParagraph class="hw-model" copyable>
+          {{ gpuText.displayText[0] }}
+
+          <span class="hw-model__tags">
+            <!-- <ATag color="blue" class="hw-model__tags__tag">{{ `` }}</ATag> -->
+          </span>
+        </ATypographyParagraph>
       </template>
 
       <p>4</p>
@@ -125,6 +155,31 @@ onBeforeMount(async () => {
       <template #header>
         <i class="iconfont display" />
         <span class="hw-name">显示器</span>
+
+        <ATypographyParagraph class="hw-model" copyable>
+          {{ monitorsText.displayText[0] }}
+
+          <ATooltip placement="bottom">
+            <template #title>
+              <span style="white-space: pre-wrap">
+                {{ monitorsText.displayText.slice(1).join('\n') }}
+              </span>
+            </template>
+
+            <ATypographyText
+              v-if="monitorsText.displayText.length > 1"
+              type="secondary"
+              style="margin-right: 4px; font-size: 12px"
+              underline
+            >
+              {{ `...等, 共${monitorsText.monitors.length}个` }}
+            </ATypographyText>
+          </ATooltip>
+
+          <span class="hw-model__tags">
+            <!-- <ATag color="blue" class="hw-model__tags__tag">{{ `` }}</ATag> -->
+          </span>
+        </ATypographyParagraph>
       </template>
 
       <p>6</p>

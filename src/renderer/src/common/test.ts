@@ -207,7 +207,7 @@ export function useTestHwinfo() {
           bus: '',
           vram: 0,
           vramDynamic: true,
-          subDeviceId: null
+          subDeviceId: undefined
         },
         {
           vendor: 'NVIDIA',
@@ -236,6 +236,26 @@ export function useTestHwinfo() {
           positionX: 0,
           positionY: 0,
           currentRefreshRate: 59
+        }
+      ],
+      monitors: [
+        {
+          vendor: 'ACR',
+          code: '0704',
+          model: 'VG240Y P',
+          serial: '2453817919',
+          instanceId: 'DISPLAY\\ACR0704\\5&1afdd5bf&0&UID4356_0',
+          builtin: false,
+          connection: 'HDMI'
+        },
+        {
+          vendor: 'BNQ',
+          code: '802E',
+          model: 'BenQ PD2700U',
+          serial: 'ETY7L00616CL0',
+          instanceId: 'DISPLAY\\BNQ802E\\5&1afdd5bf&0&UID4357_0',
+          builtin: false,
+          connection: 'DP'
         }
       ]
     },
@@ -491,35 +511,35 @@ export function useTestHwinfo() {
         voltageConfigured: 1.2,
         voltageMin: 1.2,
         voltageMax: 1.2
+      },
+      {
+        size: 17179869184,
+        bank: 'BANK 5/0',
+        type: 'DDR4',
+        ecc: false,
+        clockSpeed: 3600,
+        formFactor: 'SODIMM',
+        manufacturer: 'Crucial Technology',
+        partNum: 'CT16G4SFD824A',
+        serialNum: 'CRUCIAL005',
+        voltageConfigured: 1.2,
+        voltageMin: 1.2,
+        voltageMax: 1.2
+      },
+      {
+        size: 17179869184,
+        bank: 'BANK 5/1',
+        type: 'DDR4',
+        ecc: false,
+        clockSpeed: 3600,
+        formFactor: 'SODIMM',
+        manufacturer: 'Crucial Technology',
+        partNum: 'CT16G4SFD824A',
+        serialNum: 'CRUCIAL005',
+        voltageConfigured: 1.2,
+        voltageMin: 1.2,
+        voltageMax: 1.2
       }
-      // {
-      //   size: 17179869184,
-      //   bank: 'BANK 5/0',
-      //   type: 'DDR4',
-      //   ecc: false,
-      //   clockSpeed: 3600,
-      //   formFactor: 'SODIMM',
-      //   manufacturer: 'Crucial Technology',
-      //   partNum: 'CT16G4SFD824A',
-      //   serialNum: 'CRUCIAL005',
-      //   voltageConfigured: 1.2,
-      //   voltageMin: 1.2,
-      //   voltageMax: 1.2
-      // },
-      // {
-      //   size: 17179869184,
-      //   bank: 'BANK 5/1',
-      //   type: 'DDR4',
-      //   ecc: false,
-      //   clockSpeed: 3600,
-      //   formFactor: 'SODIMM',
-      //   manufacturer: 'Crucial Technology',
-      //   partNum: 'CT16G4SFD824A',
-      //   serialNum: 'CRUCIAL005',
-      //   voltageConfigured: 1.2,
-      //   voltageMin: 1.2,
-      //   voltageMax: 1.2
-      // }
     ],
     diskLayout: [
       {
