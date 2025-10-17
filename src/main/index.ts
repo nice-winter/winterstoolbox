@@ -4,6 +4,7 @@ import { electronApp, is, optimizer } from '@electron-toolkit/utils'
 import { initIpcMain } from './ipcMain'
 import { createWindow } from './window/createWindow'
 import si from 'systeminformation'
+import iconv from 'iconv-lite'
 
 export let mainWindow: BrowserWindow
 
@@ -35,5 +36,7 @@ app.on('window-all-closed', () => {
   }
 })
 
-const info = await si.graphics()
-console.log(info.monitors)
+si.setPowershellParser((data) => iconv.decode(data, 'gbk'))
+
+const info = await si.osInfo()
+console.log(info)
