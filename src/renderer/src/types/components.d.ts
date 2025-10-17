@@ -23,6 +23,7 @@ declare module 'vue' {
     AProgress: typeof import('ant-design-vue/es')['Progress']
     ASpace: typeof import('ant-design-vue/es')['Space']
     ATag: typeof import('ant-design-vue/es')['Tag']
+    ATooltip: typeof import('ant-design-vue/es')['Tooltip']
     ATypographyParagraph: typeof import('ant-design-vue/es')['TypographyParagraph']
     ATypographyText: typeof import('ant-design-vue/es')['TypographyText']
     ATypographyTitle: typeof import('ant-design-vue/es')['TypographyTitle']
