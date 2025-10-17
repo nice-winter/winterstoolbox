@@ -5,7 +5,7 @@ import { BrowserWindow } from 'electron/main'
 import icon from '../../../resources/icon.png?asset'
 
 /**
- * Create the main browser window.
+ * Create a browser window.
  */
 function createWindow(
   width?: number,
