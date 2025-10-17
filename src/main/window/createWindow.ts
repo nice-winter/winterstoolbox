@@ -7,7 +7,13 @@ import icon from '../../../resources/icon.png?asset'
 /**
  * Create the main browser window.
  */
-function createWindow(width?: number, height?: number, minWidth?: number, minHeight?: number) {
+function createWindow(
+  width?: number,
+  height?: number,
+  minWidth?: number,
+  minHeight?: number,
+  preload?: string
+) {
   const window = new BrowserWindow({
     width,
     height,
@@ -19,7 +25,7 @@ function createWindow(width?: number, height?: number, minWidth?: number, minHei
     autoHideMenuBar: true,
     ...(process.platform === 'linux' ? { icon } : {}),
     webPreferences: {
-      preload: fileURLToPath(new URL('../preload/index.mjs', import.meta.url)),
+      preload: preload || fileURLToPath(new URL('../preload/index.mjs', import.meta.url)),
       sandbox: false
     },
 
