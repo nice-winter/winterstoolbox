@@ -148,7 +148,7 @@ index 6833bdc9d9b17e42c764026ee5aa601c663204f8..9789959a847f2a9e29d566be74964bfb
  
  exports.graphics = graphics;
 diff --git a/lib/index.d.ts b/lib/index.d.ts
-index e38786f42f867e47eaf7310922e9df3a7f2707cf..ab5f38d20df08d3894475f92cf16c5c8b5a8e681 100644
+index e38786f42f867e47eaf7310922e9df3a7f2707cf..b34565bbb19d878128c070eaa9304412e2effd95 100644
 --- a/lib/index.d.ts
 +++ b/lib/index.d.ts
 @@ -139,6 +139,7 @@ export namespace Systeminformation {
@@ -197,6 +197,22 @@ index e38786f42f867e47eaf7310922e9df3a7f2707cf..ab5f38d20df08d3894475f92cf16c5c8
    // 4. Operating System
  
    interface OsData {
+@@ -1051,3 +1069,5 @@ export function observe(valuesObject: any, interval: number, cb?: (data: any) =>
+ 
+ export function powerShellStart(): void;
+ export function powerShellRelease(): void;
++
++export function setPowershellParser(parser?: (data: Buffer) => string): void
+diff --git a/lib/index.js b/lib/index.js
+index 81d5efb70ff94eb46d0cff87b662e164249417ca..3fd75913c63cd749710b886027f522f14398cc6a 100644
+--- a/lib/index.js
++++ b/lib/index.js
+@@ -511,3 +511,5 @@ exports.observe = observe;
+ 
+ exports.powerShellStart = util.powerShellStart;
+ exports.powerShellRelease = util.powerShellRelease;
++
++exports.setPowershellParser = util.setPowershellParser
 diff --git a/lib/memory.js b/lib/memory.js
 index 620f2d6251f49b9b4ae71417b873b84fd05bac2b..9a2a2e84d37fdc58ba5ff03a049b0a5c1db56ff5 100644
 --- a/lib/memory.js
@@ -242,23 +258,48 @@ index 620f2d6251f49b9b4ae71417b873b84fd05bac2b..9a2a2e84d37fdc58ba5ff03a049b0a5c
                      serialNum: util.getValue(lines, 'SerialNumber', ':'),
                      voltageConfigured: (parseInt(util.getValue(lines, 'ConfiguredVoltage', ':'), 10) || 0) / 1000.0,
 diff --git a/lib/util.js b/lib/util.js
-index f3b5dd7e40e811ce848abcc0181446ad82fb10f9..e182b78b0ae45507c1316236051f35a81fae364d 100644
+index f3b5dd7e40e811ce848abcc0181446ad82fb10f9..b0d93aa8973bbf3644915156fa06e92d4c449fac 100644
 --- a/lib/util.js
 +++ b/lib/util.js
-@@ -20,6 +20,7 @@ const spawn = require('child_process').spawn;
- const exec = require('child_process').exec;
- const execSync = require('child_process').execSync;
- const util = require('util');
-+const iconv = require('iconv-lite')
+@@ -53,7 +53,8 @@ const execOptsWin = {
+   windowsHide: true,
+   maxBuffer: 1024 * 20000,
+   encoding: 'UTF-8',
+-  env: Object.assign({}, process.env, { LANG: 'en_US.UTF-8' })
++  env: Object.assign({}, process.env, { LANG: 'en_US.UTF-8' }),
++  parser: null
+ };
  
- let _platform = process.platform;
- const _linux = (_platform === 'linux' || _platform === 'android');
-@@ -505,7 +506,7 @@ function powerShell(cmd) {
+ const execOptsLinux = {
+@@ -333,6 +334,12 @@ function findObjectByKey(array, key, value) {
+   return -1;
+ }
+ 
++function setPowershellParser(parser) {
++  if (typeof parser !== 'function') throw new TypeError(`'parser' argument must be a function!`);
++
++  execOptsWin.parser = parser || null
++}
++
+ function getPowershell() {
+   _powerShell = 'powershell.exe';
+   if (_windows) {
+@@ -505,7 +512,11 @@ function powerShell(cmd) {
            }
            if (child && child.pid) {
              child.stdout.on('data', function (data) {
 -              result = result + data.toString('utf8');
-+              result = result + iconv.decode(data, 'GBK');
++              if (typeof execOptsWin.parser === 'function') {
++                result = result + execOptsWin.parser(data);
++              } else {
++                result = result + data.toString('utf8');
++              }
              });
              child.stderr.on('data', function () {
                child.kill();
+@@ -2630,3 +2641,5 @@ exports.getAppleModel = getAppleModel;
+ exports.checkWebsite = checkWebsite;
+ exports.cleanString = cleanString;
+ exports.getPowershell = getPowershell;
++
++exports.setPowershellParser = setPowershellParser
