@@ -137,8 +137,8 @@ const yTrackHover = ref(false) // 鼠标是否在垂直滚动条上
 const xTrackHover = ref(false) // 鼠标是否在水平滚动条上
 const emits = defineEmits(['scroll', 'scrollend'])
 
-const autoShowTrack = computed(() => trigger === 'hover' && autoHide)
-const notAutoShowTrack = computed(() => trigger === 'hover' && !autoHide)
+const autoShowTrack = computed(() => trigger === 'hover')
+
 // 是否存在垂直滚动
 const isYScroll = computed(() => containerScrollHeight.value > containerClientHeight.value)
 // 是否存在水平滚动
@@ -148,7 +148,6 @@ const isScroll = computed(() => {
   if (containerScrollHeight.value || containerScrollWidth.value) {
     return (yScrollable && isYScroll.value) || (xScrollable && isXScroll.value)
   }
-
   return true
 })
 // 垂直滚动条高度
@@ -255,19 +254,23 @@ function xScrollEnd(e: Event, direction: 'left' | 'right' | 'top' | 'bottom'): v
   emits('scrollend', e, direction)
 }
 function hideYScrollbar(): void {
-  if (autoShowTrack.value && !yTrackHover.value) {
-    showYTrack.value = false
-  }
-  if (notAutoShowTrack.value && !mouseEnter.value) {
-    showYTrack.value = false
+  if (autoShowTrack.value) {
+    if (autoHide && !yTrackHover.value) {
+      showYTrack.value = false
+    }
+    if (!autoHide && !mouseEnter.value) {
+      showYTrack.value = false
+    }
   }
 }
 function hideXScrollbar(): void {
-  if (autoShowTrack.value && !xTrackHover.value) {
-    showXTrack.value = false
-  }
-  if (notAutoShowTrack.value && !mouseEnter.value) {
-    showXTrack.value = false
+  if (autoShowTrack.value) {
+    if (autoHide && !xTrackHover.value) {
+      showXTrack.value = false
+    }
+    if (!autoHide && !mouseEnter.value) {
+      showXTrack.value = false
+    }
   }
 }
 function onScroll(e: Event): void {
@@ -282,7 +285,7 @@ function onScroll(e: Event): void {
     emits('scroll', e, direction)
     if (autoShowTrack.value) {
       showXTrack.value = true
-      if (!trackXPressed.value) {
+      if (!trackXPressed.value && autoHide) {
         debounceXScrollEnd(e, direction)
         debounceHideXScrollbar()
       }
@@ -299,7 +302,7 @@ function onScroll(e: Event): void {
     emits('scroll', e, direction)
     if (autoShowTrack.value) {
       showYTrack.value = true
-      if (!trackYPressed.value) {
+      if (!trackYPressed.value && autoHide) {
         debounceYScrollEnd(e, direction)
         debounceHideYScrollbar()
       }
@@ -312,7 +315,7 @@ function onMouseEnter(): void {
   if (trackXPressed.value || trackYPressed.value) {
     mousePressedLeave.value = false
   } else {
-    if (!autoShowTrack.value) {
+    if (!autoHide) {
       showXTrack.value = true
       showYTrack.value = true
     }
@@ -323,7 +326,7 @@ function onMouseLeave(): void {
   if (trackXPressed.value || trackYPressed.value) {
     mousePressedLeave.value = true
   } else {
-    if (!autoShowTrack.value) {
+    if (!autoHide) {
       if (showXTrack.value) {
         debounceHideXScrollbar()
       }
@@ -338,7 +341,7 @@ function onEnterYTrack(): void {
 }
 function onLeaveYTrack(): void {
   yTrackHover.value = false
-  if (autoShowTrack.value && !trackYPressed.value) {
+  if (!trackYPressed.value) {
     debounceHideYScrollbar()
   }
 }
@@ -347,7 +350,7 @@ function onEnterXTrack(): void {
 }
 function onLeaveXTrack(): void {
   xTrackHover.value = false
-  if (autoShowTrack.value && !trackXPressed.value) {
+  if (!trackXPressed.value) {
     debounceHideXScrollbar()
   }
 }
@@ -372,9 +375,9 @@ function handleYTrackMouseMove(e: MouseEvent): void {
 }
 function handleYTrackMouseUp(): void {
   trackYPressed.value = false
-  if (autoShowTrack.value && !yTrackHover.value) {
+  if (autoShowTrack.value && autoHide && !yTrackHover.value) {
     debounceHideYScrollbar()
-  } else if (notAutoShowTrack.value && mousePressedLeave.value) {
+  } else if (autoShowTrack.value && !autoHide && mousePressedLeave.value) {
     mousePressedLeave.value = false
     debounceHideYScrollbar()
   }
@@ -402,9 +405,9 @@ function handleXTrackMouseMove(e: MouseEvent): void {
 }
 function handleXTrackMouseUp(): void {
   trackXPressed.value = false
-  if (autoShowTrack.value && !xTrackHover.value) {
+  if (autoShowTrack.value && autoHide && !xTrackHover.value) {
     debounceHideXScrollbar()
-  } else if (notAutoShowTrack.value && mousePressedLeave.value) {
+  } else if (autoShowTrack.value && !autoHide && mousePressedLeave.value) {
     mousePressedLeave.value = false
     debounceHideXScrollbar()
   }
@@ -478,8 +481,8 @@ defineExpose({
         class="scrollbar-track"
         :class="{ 'track-visible': trigger === 'none' || showYTrack }"
         :style="verticalTrackStyle"
-        @mouseenter="autoShowTrack ? onEnterYTrack() : () => false"
-        @mouseleave="autoShowTrack ? onLeaveYTrack() : () => false"
+        @mouseenter="autoShowTrack && autoHide ? onEnterYTrack() : () => false"
+        @mouseleave="autoShowTrack && autoHide ? onLeaveYTrack() : () => false"
         @mousedown.prevent.stop="handleYTrackMouseDown"
       ></div>
     </div>
@@ -493,8 +496,8 @@ defineExpose({
         class="scrollbar-track"
         :class="{ 'track-visible': trigger === 'none' || showXTrack }"
         :style="horizontalTrackStyle"
-        @mouseenter="autoShowTrack ? onEnterXTrack() : () => false"
-        @mouseleave="autoShowTrack ? onLeaveXTrack() : () => false"
+        @mouseenter="autoShowTrack && autoHide ? onEnterXTrack() : () => false"
+        @mouseleave="autoShowTrack && autoHide ? onLeaveXTrack() : () => false"
         @mousedown.prevent.stop="handleXTrackMouseDown"
       ></div>
     </div>
