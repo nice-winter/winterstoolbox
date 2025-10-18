@@ -93,18 +93,18 @@ export interface ScrollbarProps {
   yPlacement?: 'left' | 'right'
 }
 
-const props = withDefaults(defineProps<ScrollbarProps>(), {
-  contentClass: undefined,
-  contentStyle: () => ({}),
-  size: 5,
-  trigger: 'hover',
-  autoHide: true,
-  delay: 500,
-  xScrollable: false,
-  yScrollable: true,
-  xPlacement: 'bottom',
-  yPlacement: 'right'
-})
+const {
+  contentClass = undefined,
+  contentStyle = {},
+  size = 5,
+  trigger = 'hover',
+  autoHide = true,
+  delay = 500,
+  xScrollable = false,
+  yScrollable = true,
+  xPlacement = 'bottom',
+  yPlacement = 'right'
+} = defineProps<ScrollbarProps>()
 
 const containerRef = ref() // 滚动容器 DOM 引用
 const contentRef = ref() // 滚动内容 DOM 引用
@@ -137,42 +137,35 @@ const yTrackHover = ref(false) // 鼠标是否在垂直滚动条上
 const xTrackHover = ref(false) // 鼠标是否在水平滚动条上
 const emits = defineEmits(['scroll', 'scrollend'])
 
-const autoShowTrack = computed(() => {
-  return props.trigger === 'hover' && props.autoHide
-})
-const notAutoShowTrack = computed(() => {
-  return props.trigger === 'hover' && !props.autoHide
-})
-const isYScroll = computed(() => {
-  // 是否存在垂直滚动
-  return containerScrollHeight.value > containerClientHeight.value
-})
-const isXScroll = computed(() => {
-  // 是否存在水平滚动
-  return containerScrollWidth.value > containerClientWidth.value
-})
+const autoShowTrack = computed(() => trigger === 'hover' && autoHide)
+const notAutoShowTrack = computed(() => trigger === 'hover' && !autoHide)
+// 是否存在垂直滚动
+const isYScroll = computed(() => containerScrollHeight.value > containerClientHeight.value)
+// 是否存在水平滚动
+const isXScroll = computed(() => containerScrollWidth.value > containerClientWidth.value)
+// 是否存在滚动，水平或垂直
 const isScroll = computed(() => {
-  // 是否存在滚动，水平或垂直
   if (containerScrollHeight.value || containerScrollWidth.value) {
-    return (props.yScrollable && isYScroll.value) || (props.xScrollable && isXScroll.value)
+    return (yScrollable && isYScroll.value) || (xScrollable && isXScroll.value)
   }
+
   return true
 })
+// 垂直滚动条高度
 const trackHeight = computed(() => {
-  // 垂直滚动条高度
-  if (props.yScrollable && isYScroll.value) {
+  if (yScrollable && isYScroll.value) {
     if (containerHeight.value && contentHeight.value && railHeight.value) {
       const value = Math.min(
         containerHeight.value,
-        (railHeight.value * containerHeight.value) / contentHeight.value + 1.5 * props.size
+        (railHeight.value * containerHeight.value) / contentHeight.value + 1.5 * size
       )
       return Number(value.toFixed(4))
     }
   }
   return 0
 })
+// 滚动条垂直偏移
 const trackTop = computed(() => {
-  // 滚动条垂直偏移
   if (containerHeight.value && contentHeight.value && railHeight.value) {
     return (
       (containerScrollTop.value / (contentHeight.value - containerHeight.value)) *
@@ -181,25 +174,25 @@ const trackTop = computed(() => {
   }
   return 0
 })
+// 垂直滚动条样式
 const verticalTrackStyle = computed(() => {
-  // 垂直滚动条样式
   return {
     top: `${trackTop.value}px`,
     height: `${trackHeight.value}px`
   }
 })
+// 横向滚动条宽度
 const trackWidth = computed(() => {
-  // 横向滚动条宽度
-  if (props.xScrollable && isXScroll.value) {
+  if (xScrollable && isXScroll.value) {
     if (containerWidth.value && contentWidth.value && railWidth.value) {
-      const value = (railWidth.value * containerWidth.value) / contentWidth.value + 1.5 * props.size
+      const value = (railWidth.value * containerWidth.value) / contentWidth.value + 1.5 * size
       return Number(value.toFixed(4))
     }
   }
   return 0
 })
+// 滚动条水平偏移
 const trackLeft = computed(() => {
-  // 滚动条水平偏移
   if (containerWidth.value && contentWidth.value && railWidth.value) {
     return (
       (containerScrollLeft.value / (contentWidth.value - containerWidth.value)) *
@@ -208,8 +201,8 @@ const trackLeft = computed(() => {
   }
   return 0
 })
+// 水平滚动条样式
 const horizontalTrackStyle = computed(() => {
-  // 水平滚动条样式
   return {
     left: `${trackLeft.value}px`,
     width: `${trackWidth.value}px`
@@ -252,8 +245,8 @@ function updateState(): void {
 
 const debounceYScrollEnd = debounce(yScrollEnd, 100)
 const debounceXScrollEnd = debounce(xScrollEnd, 100)
-const debounceHideYScrollbar = debounce(hideYScrollbar, 100 + props.delay)
-const debounceHideXScrollbar = debounce(hideXScrollbar, 100 + props.delay)
+const debounceHideYScrollbar = debounce(hideYScrollbar, 100 + delay)
+const debounceHideXScrollbar = debounce(hideXScrollbar, 100 + delay)
 
 function yScrollEnd(e: Event, direction: 'left' | 'right' | 'top' | 'bottom'): void {
   emits('scrollend', e, direction)
