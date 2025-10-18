@@ -20,6 +20,7 @@ export function useMounted(): Ref<boolean> {
   }
   return isMounted
 }
+
 /**
  * 检查 api 是否支持
  *

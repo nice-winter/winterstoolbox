@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
 import type { CSSProperties } from 'vue'
-import { debounce, useResizeObserver, useScroll } from '@components/utils'
-export interface Props {
+import { debounce, useResizeObserver, useScroll } from '@/common/utils'
+
+export interface ScrollbarProps {
   contentClass?: string // 内容 div 的类名
   contentStyle?: CSSProperties // 内容 div 的样式
   size?: number // 滚动条的大小，单位 px
@@ -14,7 +15,8 @@ export interface Props {
   xPlacement?: 'top' | 'bottom' // 横向滚动时滚动条的位置
   yPlacement?: 'left' | 'right' // 纵向滚动时滚动条的位置
 }
-const props = withDefaults(defineProps<Props>(), {
+
+const props = withDefaults(defineProps<ScrollbarProps>(), {
   contentClass: undefined,
   contentStyle: () => ({}),
   size: 5,
@@ -26,6 +28,7 @@ const props = withDefaults(defineProps<Props>(), {
   xPlacement: 'bottom',
   yPlacement: 'right'
 })
+
 const containerRef = ref() // 滚动容器 DOM 引用
 const contentRef = ref() // 滚动内容 DOM 引用
 const railVerticalRef = ref() // 垂直滚动条 DOM 引用
@@ -56,6 +59,7 @@ const horizontalContentStyle = { width: 'fit-content' } // 水平滚动时内容
 const yTrackHover = ref(false) // 鼠标是否在垂直滚动条上
 const xTrackHover = ref(false) // 鼠标是否在水平滚动条上
 const emits = defineEmits(['scroll', 'scrollend'])
+
 const autoShowTrack = computed(() => {
   return props.trigger === 'hover' && props.autoHide
 })
@@ -134,16 +138,20 @@ const horizontalTrackStyle = computed(() => {
     width: `${trackWidth.value}px`
   }
 })
+
 onMounted(() => {
   updateState()
 })
+
 const {
   left: scrollingLeft,
   right: scrollingRight,
   top: scrollingTop,
   bottom: scrollingBottom
 } = useScroll(containerRef)
+
 useResizeObserver([containerRef, contentRef], updateState)
+
 function updateScrollState(): void {
   containerScrollTop.value = containerRef.value.scrollTop
   containerScrollLeft.value = containerRef.value.scrollLeft
@@ -164,10 +172,12 @@ function updateState(): void {
   updateScrollState()
   updateScrollbarState()
 }
+
 const debounceYScrollEnd = debounce(yScrollEnd, 100)
 const debounceXScrollEnd = debounce(xScrollEnd, 100)
 const debounceHideYScrollbar = debounce(hideYScrollbar, 100 + props.delay)
 const debounceHideXScrollbar = debounce(hideXScrollbar, 100 + props.delay)
+
 function yScrollEnd(e: Event, direction: 'left' | 'right' | 'top' | 'bottom'): void {
   emits('scrollend', e, direction)
 }
@@ -331,6 +341,7 @@ function handleXTrackMouseUp(): void {
   document.removeEventListener('mousemove', handleXTrackMouseMove)
   document.removeEventListener('mouseup', handleXTrackMouseUp)
 }
+
 function scrollTo(...args: unknown[]): void {
   containerRef.value?.scrollTo(...args)
 }
@@ -346,12 +357,14 @@ function getScrollData(): object {
     clientHeight: containerClientHeight.value
   }
 }
+
 defineExpose({
   scrollTo,
   scrollBy,
   getScrollData
 })
 </script>
+
 <template>
   <div
     class="scrollbar-wrap"
@@ -417,6 +430,7 @@ defineExpose({
     </div>
   </div>
 </template>
+
 <style lang="less" scoped>
 .scrollbar-wrap {
   overflow: hidden;
