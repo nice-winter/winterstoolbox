@@ -1,15 +1,12 @@
 <script setup lang="ts">
 const route = useRoute()
 
-onBeforeMount(async () => {
-  // const hwinfo = await window.api.hwinfo()
-  // console.log(hwinfo)
-})
+onBeforeMount(async () => {})
 </script>
 
 <template>
   <AApp>
-    <WindowControlMenu />
+    <WindowControlButtons />
 
     <AppContainer>
       <template #sider>
@@ -17,9 +14,9 @@ onBeforeMount(async () => {
       </template>
 
       <template #headerTitle>
-        <a-typography-title :level="5" style="margin-bottom: 0" class="no-drag">
+        <ATypographyTitle :level="5" style="margin-bottom: 0" class="no-drag">
           {{ route.meta.name }}
-        </a-typography-title>
+        </ATypographyTitle>
       </template>
 
       <template #content>

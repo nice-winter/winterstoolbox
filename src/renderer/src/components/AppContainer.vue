@@ -1,13 +1,7 @@
 <script setup lang="ts">
-//import { useProgress } from '@/common/useProgress'
-import { useProgress } from './Progress/useProgress'
+import { useAppProgressStore } from '@/stores/appProgressStore'
 
-// const progress = useProgress()
-const appProgress = useProgress()
-// appProgress.set(20)
-// setTimeout(() => {
-//   appProgress.set(100)
-// }, 5000)
+const progress = useAppProgressStore()
 </script>
 
 <template>
@@ -20,8 +14,8 @@ const appProgress = useProgress()
       <a-layout-header class="header">
         <div class="header__title">
           <slot name="headerTitle"></slot>
-          <Spin :show="appProgress.currentRouteHasProgress.value" style="margin-left: 20px">
-            {{ appProgress.currentRouteProgress.value?.message }}
+          <Spin :show="progress.currentRouteHasProgressState" style="margin-left: 20px">
+            {{ progress.currentRouteProgressState?.message }}
           </Spin>
         </div>
 

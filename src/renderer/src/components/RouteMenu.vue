@@ -1,10 +1,10 @@
 <script lang="ts" setup>
-import { useProgress } from '@components/Progress/useProgress'
+import { useAppProgressStore } from '@/stores/appProgressStore'
 import type { MenuProps } from 'ant-design-vue'
 
 const router = useRouter()
 const routes = computed(() => router.getRoutes().sort((a, b) => a.meta.weight - b.meta.weight))
-const progress = useProgress()
+const progress = useAppProgressStore()
 
 const selectedKeys = ref<string[]>([])
 
@@ -39,7 +39,7 @@ watch(selectedKeys, (val) => {
       {{ route.meta.name }}
 
       <Spin
-        :show="progress.routeHasProgress(route.path).value"
+        :show="progress.routeHasProgressState(route.path).value"
         style="float: inline-end; margin: 8px 0px"
       />
     </AMenuItem>

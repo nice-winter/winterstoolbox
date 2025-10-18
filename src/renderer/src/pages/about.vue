@@ -8,12 +8,12 @@ definePage({
 })
 
 import { useLoadingMessageGenerator } from '@/common/test'
-import { useProgress } from '@components/Progress/useProgress'
+import { useAppProgressStore } from '@/stores/appProgressStore'
 
 const route = useRoute()
 const routePath = unref(route.path)
 
-const progress = useProgress()
+const progress = useAppProgressStore()
 const loadingMessageGenerator = useLoadingMessageGenerator()
 const timer = ref<number>(0)
 

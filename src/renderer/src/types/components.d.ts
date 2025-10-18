@@ -20,6 +20,7 @@ declare module 'vue' {
     AMenu: typeof import('ant-design-vue/es')['Menu']
     AMenuItem: typeof import('ant-design-vue/es')['MenuItem']
     AppContainer: typeof import('./../components/AppContainer.vue')['default']
+    AppProgress: typeof import('./../components/AppProgress.vue')['default']
     AProgress: typeof import('ant-design-vue/es')['Progress']
     ASpace: typeof import('ant-design-vue/es')['Space']
     ATag: typeof import('ant-design-vue/es')['Tag']
@@ -27,12 +28,11 @@ declare module 'vue' {
     ATypographyParagraph: typeof import('ant-design-vue/es')['TypographyParagraph']
     ATypographyText: typeof import('ant-design-vue/es')['TypographyText']
     ATypographyTitle: typeof import('ant-design-vue/es')['TypographyTitle']
-    Progress: typeof import('./../components/Progress/Progress.vue')['default']
     RouteMenu: typeof import('./../components/RouteMenu.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     Scrollbar: typeof import('./../components/Scrollbar.vue')['default']
     Spin: typeof import('./../components/Spin.vue')['default']
-    WindowControlMenu: typeof import('./../components/WindowControlMenu.vue')['default']
+    WindowControlButtons: typeof import('./../components/WindowControlButtons.vue')['default']
   }
 }
