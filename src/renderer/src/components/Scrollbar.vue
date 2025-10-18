@@ -4,16 +4,93 @@ import type { CSSProperties } from 'vue'
 import { debounce, useResizeObserver, useScroll } from '@/common/utils'
 
 export interface ScrollbarProps {
-  contentClass?: string // 内容 div 的类名
-  contentStyle?: CSSProperties // 内容 div 的样式
-  size?: number // 滚动条的大小，单位 px
-  trigger?: 'hover' | 'none' // 显示滚动条的时机，'none' 表示一直显示
-  autoHide?: boolean // 是否自动隐藏滚动条，仅当 trigger: 'hover' 时生效；为 true 时表示鼠标在滚动区域且不滚动时自动隐藏，滚动时自动显示；为 false 时表示鼠标在滚动区域时始终显示，无论是否在滚动
-  delay?: number // 滚动条自动隐藏的延迟时间，单位 ms
-  xScrollable?: boolean // 是否使用横向滚动
-  yScrollable?: boolean // 是否使用纵向滚动
-  xPlacement?: 'top' | 'bottom' // 横向滚动时滚动条的位置
-  yPlacement?: 'left' | 'right' // 纵向滚动时滚动条的位置
+  /**
+   * 内容容器的 CSS 类名
+   *
+   * @default undefined
+   */
+  contentClass?: string
+
+  /**
+   * 内容容器的内联样式
+   *
+   * @default {}
+   */
+  contentStyle?: CSSProperties
+
+  /**
+   * 滚动条的尺寸（单位：px）
+   *
+   * @default 5
+   */
+  size?: number
+
+  /**
+   * 滚动条的显示触发方式
+   *
+   * - `'hover'`: 鼠标悬停时显示
+   * - `'none'`: 始终显示
+   *
+   * @default 'hover'
+   */
+  trigger?: 'hover' | 'none'
+
+  /**
+   * 是否自动隐藏滚动条
+   *
+   * @remarks
+   * 仅当 `trigger: 'hover'` 时生效。
+   *
+   * - `true`: 鼠标在滚动区域内且不滚动时自动隐藏，滚动时自动显示；
+   * - `false`: 鼠标在滚动区域内时始终显示，无论是否在滚动。
+   *
+   * @default true
+   */
+  autoHide?: boolean
+
+  /**
+   * 滚动条自动隐藏的延迟时间（单位：ms）
+   *
+   * @remarks
+   * 仅当 `autoHide: true` 时生效。
+   *
+   * @default 500
+   */
+  delay?: number
+
+  /**
+   * 是否启用横向滚动
+   *
+   * @default false
+   */
+  xScrollable?: boolean
+
+  /**
+   * 是否启用纵向滚动
+   *
+   * @default true
+   */
+  yScrollable?: boolean
+
+  /**
+   * 横向滚动条的位置
+   *
+   * - `'top'`: 顶部
+   * - `'bottom'`: 底部
+   *
+   * @default 'bottom'
+   */
+  xPlacement?: 'top' | 'bottom'
+
+  /**
+   * 纵向滚动条的位置
+   *
+   * - `'left'`: 左侧
+   * - `'right'`: 右侧
+   *
+   * @default 'right'
+   */
+  yPlacement?: 'left' | 'right'
 }
 
 const props = withDefaults(defineProps<ScrollbarProps>(), {
