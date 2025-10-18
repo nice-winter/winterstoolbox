@@ -7,14 +7,9 @@ definePage({
   }
 })
 
-import {
-  gpuDisplayText,
-  memDisplayText,
-  monitorsDisplayText,
-  numberToChinese
-} from '@/common/helper'
+import { gpuDisplayText, memDisplayText, monitorsDisplayText } from '@/common/helper'
 import { useLoadingMessageGenerator, useTestHwinfo } from '@/common/test'
-import { useProgress } from '@components/Progress/useProgress'
+import { useAppProgressStore } from '@/stores/appProgressStore'
 
 type ExtractPromise<T> = T extends Promise<infer U> ? U : T
 type Hwinfo = ExtractPromise<ReturnType<typeof useTestHwinfo>>
@@ -48,7 +43,6 @@ const monitorsText = computed(() => {
 
 onBeforeMount(async () => {
   hwinfo.value = useTestHwinfo()
-  console.log(hwinfo.value)
 })
 </script>
 
